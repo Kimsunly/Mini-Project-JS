@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Sign in</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="./img/svg/logo.svg" type="image/x-icon">
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="./css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <style>
+        .toast-container {
+            z-index: 1055;
+        }
+
+        .toast-success {
+            background: linear-gradient(90deg, #00c851, #007e33);
+            color: #fff !important;
+            box-shadow: 0 0 15px rgba(0, 200, 81, 0.6);
+        }
+
+        .toast-error {
+            background: linear-gradient(90deg, #ff4444, #cc0000);
+            color: #fff !important;
+            box-shadow: 0 0 15px rgba(255, 68, 68, 0.6);
+        }
+
+        .toast {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .toast.show {
+            opacity: 1;
+            display: block;
+            animation: slideUp 0.5s ease;
+        }
+
+        .signin-gif {
+            border-radius: 10px;
+            height: 100%;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(150px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .signin-btn {
+            background: linear-gradient(90deg, #007bff, #6610f2);
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+        }
+
+        .signin-btn:hover {
+            background: linear-gradient(90deg, #6610f2, #007bff);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 123, 255, 0.4);
+        }
+
+        .signin-btn:disabled {
+            opacity: 0.8;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .signin-btn .spinner-border {
+            width: 1rem;
+            height: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layer"></div>
+    <main class="page-center">
+        <article class="sign-up">
+            <h1 class="sign-up__title">Login</h1>
+            <form class="sign-up-form form row" id="signinForm">
+                <div class="col-6">
+                    <img src="assets/login.gif" class="signin-gif" alt="Funny GIF">
+                </div>
+                <div class="col-6">
+                    <label class="form-label-wrapper">
+                        <p class="form-label">Email</p>
+                        <input class="form-input" id="email" type="email" placeholder="Enter your email">
+                    </label>
+                    <label class="form-label-wrapper">
+                        <p class="form-label">Password</p>
+                        <input class="form-input" id="password" type="password" placeholder="Enter your password">
+                    </label>
+                    <button type="submit" id="signinBtn"
+                        class="btn w-100 py-2 mt-3 fw-semibold d-flex justify-content-center align-items-center text-white border-0 rounded-3 position-relative signin-btn">
+                        <span class="btn-text">Sign in</span>
+                        <span class="spinner-border spinner-border-sm ms-2 d-none" role="status"
+                            aria-hidden="true"></span>
+                    </button>
+                    <p class="text-center mt-5 mb-0 text-white">
+                        Don’t have an account?
+                        <a href="signup.html" class="text-decoration-none fw-semibold" style="color: #007bff;">
+                            Sign up here
+                        </a>
+                    </p>
+                </div>
+            </form>
+        </article>
+    </main>
+    <div class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3">
+        <div id="registerToast" class="toast align-items-center border-0 text-white" role="alert" aria-live="assertive"
+            aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body" id="toast-body"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Chart library -->
+    <script src="./plugins/chart.min.js"></script>
+    <!-- Icons library -->
+    <script src="plugins/feather.min.js"></script>
+    <!-- Custom scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script src="./js/script.js"></script>
+    <script>
+        let signinForm = document.getElementById("signinForm");
+        let firstName = document.getElementById("firstname");
+        let lastName = document.getElementById("lastname");
+        let email = document.getElementById("email");
+        let password = document.getElementById("password");
+        let confirmPassword = document.getElementById("confirmPassword");
+        // for loading
+        const signinBtn = document.getElementById("signinBtn");
+        const btnText = signinBtn.querySelector(".btn-text");
+        const btnSpinner = signinBtn.querySelector(".spinner-border");
+        function setLoading(isLoading, loadingText = "Signing...") {
+            if (isLoading) {
+                signinBtn.disabled = true;
+                btnSpinner.classList.remove("d-none");
+                btnText.textContent = loadingText;
+            } else {
+                signinBtn.disabled = false;
+                btnSpinner.classList.add("d-none");
+                btnText.textContent = "Sign in";
+            }
+        }
+
+        // For toast
+        const toastElement = document.getElementById("registerToast");
+        const toastBody = document.getElementById("toast-body");
+        const toastInstance = new bootstrap.Toast(toastElement, { delay: 4000 });
+
+        function showToast(message, type = "success") {
+            toastElement.classList.remove("toast-success", "toast-error");
+            toastBody.textContent = message;
+            if (type === "error") {
+                toastElement.classList.add("toast-error");
+            } else {
+                toastElement.classList.add("toast-success");
+            }
+            toastInstance.show();
+        }
+
+        signinForm.onsubmit = (e) => {
+            e.preventDefault();
+
+            let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email.value) {
+                showToast("✗ Please enter your email!", "error");
+                return;
+            }
+            if (!emailPattern.test(email.value)) {
+                showToast("✗ Invalid email format!", "error");
+                return;
+            }
+
+            const pwd = password.value;
+            const pwdPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+            if (!pwd) {
+                showToast("✗ Please enter your password!", "error");
+                return;
+            } else if (!pwdPattern.test(pwd)) {
+                showToast("Invalid Email or Password!", "error");
+                return;
+            }
+            setLoading(true);
+
+            let loginData = {
+                email: email.value,
+                password: password.value,
+            };
+            fetch(`http://blogs.csm.linkpc.net/api/v1/auth/login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(loginData)
+            })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    if (data && (data.token || data.message === "Login successful.")) {
+                        showToast("✓ Login Successfully!", "success");
+                        localStorage.setItem("authToken", data.data.token);
+                        location.href = "profile.html";
+                    } else {
+                        showToast("✗ Invalid Email or Password!", "error");
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    showToast("✗ Network error. Try again.", "error");
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
+        };
+
+    </script>
+</body>
+
+</html>
