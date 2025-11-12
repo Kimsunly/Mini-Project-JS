@@ -205,10 +205,11 @@
                 <div class="container">
                     <div class="d-flex m-3 justify-content-between">
                         <h3 class=""><b>Categories</b></h3>
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateCate">Create Categories</button>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateCate">Create
+                            Categories</button>
                         <!-- Modal edit category -->
-                        <div class="modal fade" id="updateCate" tabindex="-1" aria-hidden="false" aria-labelledby="updateCate"
-                            aria-hidden="true">
+                        <div class="modal fade" id="updateCate" tabindex="-1" aria-hidden="false"
+                            aria-labelledby="updateCate" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered ">
                                 <div class="modal-content ">
                                     <div class="modal-header border-0">
@@ -218,13 +219,13 @@
                                     </div>
                                     <div class="modal-body border-0">
                                         <form action="">
-                                            <input type="text" id="categoriesName" class="form-control border" placeholder="Enter Category Name">
+                                            <input type="text" id="categoriesName" class="form-control border"
+                                                placeholder="Enter Category Name">
                                         </form>
                                     </div>
                                     <div class="modal-footer border-0">
-                                        <!-- <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Close</button> -->
-                                        <button type="button" id="saveCate" class="btn btn-primary" data-bs-dismiss="">Save</button>
+                                        <button type="button" id="saveCate" class="btn btn-primary"
+                                            data-bs-dismiss="modal">Create</button>
                                     </div>
                                 </div>
                             </div>
@@ -237,27 +238,64 @@
                                 <th class="text-end pe-4">Action</th>
                             </thead>
                             <tbody class="" id="tbody">
-
                             </tbody>
                         </table>
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-end">
+                                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                            </ul>
+                        </nav>
+                        <!-- Modal edit category -->
+                        <div class="modal fade" id="editCate" tabindex="-1" aria-hidden="false"
+                            aria-labelledby="updateCate" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered ">
+                                <div class="modal-content ">
+                                    <div class="modal-header border-0">
+                                        <h1 class="modal-title fs-4" id="exampleModalLabel"><b>Edit Category</b></h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body border-0">
+                                        <form action="">
+                                            <input type="text" id="editCateName" class="form-control border"
+                                                placeholder="Enter Category Name">
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer border-0">
+                                        <button type="button" id="saveEditCate" class="btn btn-primary"
+                                            data-bs-dismiss="modal">Save Edit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal delete category -->
+                        <div class="modal fade" id="deleteCate" tabindex="-1" aria-hidden="false"
+                            aria-labelledby="deleteCate" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered ">
+                                <div class="modal-content ">
+                                    <div class="modal-header border-0">
+                                        <h1 class="modal-title fs-4" id="exampleModalLabel"><b id="deleteStatus"></b>
+                                        </h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body border-0">
+                                        <p>Did you sure?</p>
+                                    </div>
+                                    <div class="modal-footer border-0">
+                                        <button type="button" id="btnDeleteCate" class="btn btn-danger"
+                                            data-bs-dismiss="modal">Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </main>
-            <!-- ! Footer -->
-            <!-- <footer class="footer">
-                <div class="container footer--flex">
-                    <div class="footer-start">
-                        <p>2021 © Elegant Dashboard - <a href="elegant-dashboard.com" target="_blank"
-                                rel="noopener noreferrer">elegant-dashboard.com</a></p>
-                    </div>
-                    <ul class="footer-end">
-                        <li><a href="##">About</a></li>
-                        <li><a href="##">Support</a></li>
-                        <li><a href="##">Puchase</a></li>
-                        
-                    </ul>
-                </div>
-            </footer> -->
         </div>
     </div>
     <!-- boostrap js -->
@@ -269,8 +307,12 @@
     <!-- Custom scripts -->
     <script src="js/script.js"></script>
     <script>
+
+
+
+        let idCate;
         let body = document.getElementById('tbody');
-        fetch('http://blogs.csm.linkpc.net/api/v1/categories?_page=1&_per_page=93')
+        fetch('http://blogs.csm.linkpc.net/api/v1/categories?_page=1&_per_page=10')
             .then(res => res.json())
             .then(data => {
                 let sortedDesc = data.data.items.sort((a, b) => b.id - a.id);
@@ -278,32 +320,113 @@
                 data.data.items.forEach(element => {
                     body.innerHTML +=
                         ` <tr>
-           <td class="align-middle">${ element.name}</td>
-           <td align="right"><button onclick="editCate(${element.id})" class="btn text-primary fs-5"><i class="fa-regular fa-pen-to-square"></i></button><button class="btn text-danger fs-5"><i class="fa-regular fa-trash-can"></i></button></td>
+           <td class="align-middle">${element.name}</td>
+           <td align="right"><button onclick="editCate(${element.id})" class="btn text-primary fs-5" data-bs-toggle="modal" data-bs-target="#editCate"><i class="fa-regular fa-pen-to-square"></i>
+            </button>
+            <button onclick="openDelete(${element.id})" class="btn text-danger fs-5" data-bs-toggle="modal" data-bs-target="#deleteCate"><i class="fa-regular fa-trash-can"></i></button></td>
            </tr>`;
                 });
             })
-
-        let saveCate=document.getElementById('saveCate');
-        saveCate.onclick=()=>{
-            let categoriesName=document.getElementById('categoriesName');
-            let data={
-                name:categoriesName.value
+        //------------------------------------ get all data ---------------------------
+        function getAllCate() {
+            body.innerText = '';
+            fetch('http://blogs.csm.linkpc.net/api/v1/categories?_page=1&_per_page=10')
+                .then(res => res.json())
+                .then(data => {
+                    let sortedDesc = data.data.items.sort((a, b) => b.id - a.id);
+                    console.log(sortedDesc);
+                    data.data.items.forEach(element => {
+                        body.innerHTML +=
+                            ` <tr>
+           <td class="align-middle">${element.name}</td>
+           <td align="right"><button onclick="editCate(${element.id})" class="btn text-primary fs-5" data-bs-toggle="modal" data-bs-target="#editCate"><i class="fa-regular fa-pen-to-square"></i>
+            </button>
+            <button onclick="openDelete(${element.id})" class="btn text-danger fs-5" data-bs-toggle="modal" data-bs-target="#deleteCate"><i class="fa-regular fa-trash-can"></i></button></td>
+           </tr>`;
+                    });
+                })
+        }
+        //---------------------------------- create category -------------------------
+        let saveCate = document.getElementById('saveCate');
+        saveCate.onclick = () => {
+            let categoriesName = document.getElementById('categoriesName');
+            let data = {
+                name: categoriesName.value
             }
-            fetch('http://blogs.csm.linkpc.net/api/v1/categories',{
-                method:'POST',
-                headers:{
-                    'Content-Type':'application/json',
+            fetch('http://blogs.csm.linkpc.net/api/v1/categories', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
                     "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUzOCwiaWF0IjoxNzYyNzg4NzY3LCJleHAiOjE3NjMzOTM1Njd9.gtoMUf3a96u6b-ThPxAKaPlsf3Z23NqeWRwoBHw0HG8`
                 },
-                body:JSON.stringify(data)
+                body: JSON.stringify(data)
             })
-            .then(res=>res.json())
-            .then(data=>{console.log(data)});
-            
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data)
+                    getAllCate();
+                });
+
         }
-        function editCate(id){
-            alert(id);
+        //---------------------------------- open modal edit -------------------------
+        function editCate(id) {
+            idCate = id;
+            fetch(`http://blogs.csm.linkpc.net/api/v1/categories/${id}`)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('editCateName').value = data.data.name;
+                    console.log(data.data.name);
+                })
+
+        }
+
+        //----------------------------------- edit category ---------------------------
+        let saveEdit = document.getElementById('saveEditCate');
+        saveEdit.onclick = () => {
+            let data = {
+                name: editCateName.value
+            }
+            fetch(`http://blogs.csm.linkpc.net/api/v1/categories/${idCate}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUzOCwiaWF0IjoxNzYyNzg4NzY3LCJleHAiOjE3NjMzOTM1Njd9.gtoMUf3a96u6b-ThPxAKaPlsf3Z23NqeWRwoBHw0HG8`
+                },
+                body: JSON.stringify(data)
+            })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    getAllCate();
+                })
+        }
+        //----------------------------------- open modal delete category ------------
+        function openDelete(id) {
+            idCate = id;
+            fetch(`http://blogs.csm.linkpc.net/api/v1/categories/${id}`)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('deleteStatus').innerText = data.data.name;
+                    console.log(data.data.name);
+                })
+        }
+        //-------------------------------------- delete category ---------------------
+        let deleteCate = document.getElementById('btnDeleteCate');
+        deleteCate.onclick = () => {
+            fetch(`http://blogs.csm.linkpc.net/api/v1/categories/${idCate}`,
+                {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUzOCwiaWF0IjoxNzYyNzg4NzY3LCJleHAiOjE3NjMzOTM1Njd9.gtoMUf3a96u6b-ThPxAKaPlsf3Z23NqeWRwoBHw0HG8`
+                    }
+                }
+            )
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    getAllCate();
+                })
         }
     </script>
 </body>
