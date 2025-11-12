@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard | Dashboard + Profile</title>
+    <link rel="shortcut icon" href="./img/svg/logo.svg" type="image/x-icon" />
+    <link rel="stylesheet" href="./css/style.min.css" />
+
+    <style>
+        /* Profile card style */
+        .profile-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-top: 40px;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 24px;
+            margin-bottom: 24px;
+        }
+
+        .avatar-section {
+            position: relative;
+            width: 130px;
+            height: 130px;
+        }
+
+        .avatar-wrapper {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid #4c6fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f1f5f9;
+            position: relative;
+        }
+
+        .avatar-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .upload-btn {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: #4c6fff;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s;
+        }
+
+        .upload-btn:hover {
+            background: #3b5bff;
+            transform: scale(1.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: #334155;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .btn-action {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-delete-avatar {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-delete-avatar:hover {
+            background: #dc2626;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-update-profile {
+            background: #4c6fff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-update-profile:hover {
+            background: #3b5bff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(76, 111, 255, 0.4);
+        }
+
+        .alert {
+            display: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layer"></div>
+    <a class="skip-link sr-only" href="#skip-target">Skip to content</a>
+
+    <div class="page-flex">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-start">
+                <div class="sidebar-head">
+                    <a href="/" class="logo-wrapper" title="Home">
+                        <span class="sr-only">Home</span>
+                        <span class="icon logo"></span>
+                        <div class="logo-text">
+                            <span class="logo-title">Admin</span>
+                            <span class="logo-subtitle">Dashboard</span>
+                        </div>
+                    </a>
+                    <button class="sidebar-toggle transparent-btn" type="button">
+                        <span class="icon menu-toggle"></span>
+                    </button>
+                </div>
+                <div class="sidebar-body">
+                    <ul class="sidebar-body-menu">
+                        <li><a class="active" href="index.html"><span class="icon home"></span>Dashboard</a></li>
+                        <li>
+                            <a class="show-cat-btn" href="#"><span class="icon document"></span>My Articles<span
+                                    class="category__btn transparent-btn"><span
+                                        class="icon arrow-down"></span></span></a>
+                            <ul class="cat-sub-menu">
+                                <li><a href="posts.html">All Articles</a></li>
+                                <li><a href="new-post.html">Create Article</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a class="show-cat-btn" href="#"><span class="icon folder"></span>Categories<span
+                                    class="category__btn transparent-btn"><span
+                                        class="icon arrow-down"></span></span></a>
+                            <ul class="cat-sub-menu">
+                                <li><a href="categories.html">All Categories</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#profile-section"><span class="icon user"></span>Profile</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="sidebar-footer">
+                <a href="#" class="sidebar-user">
+                    <span class="sidebar-user-img"><img src="./img/avatar/avatar-illustrated-01.png" alt="User"></span>
+                    <div class="sidebar-user-info">
+                        <span class="sidebar-user__title" id="sidebarUser">Loading...</span>
+                        <span class="sidebar-user__subtitle">Admin</span>
+                    </div>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main -->
+        <div class="main-wrapper">
+            <!-- Navbar -->
+            <nav class="main-nav--bg">
+                <div class="container main-nav">
+                    <div class="main-nav-start">
+                        <div class="search-wrapper">
+                            <i data-feather="search" aria-hidden="true"></i>
+                            <input type="text" placeholder="Enter keywords ..." required>
+                        </div>
+                    </div>
+                    <div class="main-nav-end">
+                        <button class="sidebar-toggle transparent-btn" title="Menu" type="button">
+                            <span class="sr-only">Toggle menu</span>
+                            <span class="icon menu-toggle--gray" aria-hidden="true"></span>
+                        </button>
+                        <div class="lang-switcher-wrapper">
+                            <button class="lang-switcher transparent-btn" type="button">
+                                EN
+                                <i data-feather="chevron-down" aria-hidden="true"></i>
+                            </button>
+                            <ul class="lang-menu dropdown">
+                                <li><a href="##">English</a></li>
+                                <li><a href="##">French</a></li>
+                                <li><a href="##">Uzbek</a></li>
+                            </ul>
+                        </div>
+                        <button class="theme-switcher gray-circle-btn" type="button" title="Switch theme">
+                            <span class="sr-only">Switch theme</span>
+                            <i class="sun-icon" data-feather="sun" aria-hidden="true"></i>
+                            <i class="moon-icon" data-feather="moon" aria-hidden="true"></i>
+                        </button>
+                        <div class="notification-wrapper">
+                            <button class="gray-circle-btn dropdown-btn" title="To messages" type="button">
+                                <span class="sr-only">To messages</span>
+                                <span class="icon notification active" aria-hidden="true"></span>
+                            </button>
+                            <ul class="users-item-dropdown notification-dropdown dropdown">
+                                <li>
+                                    <a href="##">
+                                        <div class="notification-dropdown-icon info">
+                                            <i data-feather="check"></i>
+                                        </div>
+                                        <div class="notification-dropdown-text">
+                                            <span class="notification-dropdown__title">System just updated</span>
+                                            <span class="notification-dropdown__subtitle">The system has been
+                                                successfully upgraded. Read more
+                                                here.</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="##">
+                                        <div class="notification-dropdown-icon danger">
+                                            <i data-feather="info" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="notification-dropdown-text">
+                                            <span class="notification-dropdown__title">The cache is full!</span>
+                                            <span class="notification-dropdown__subtitle">Unnecessary caches take up a
+                                                lot of memory space and
+                                                interfere ...</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="##">
+                                        <div class="notification-dropdown-icon info">
+                                            <i data-feather="check" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="notification-dropdown-text">
+                                            <span class="notification-dropdown__title">New Subscriber here!</span>
+                                            <span class="notification-dropdown__subtitle">A new subscriber has
+                                                subscribed.</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="link-to-page" href="##">Go to Notifications page</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="nav-user-wrapper">
+                            <button href="##" class="nav-user-btn dropdown-btn" title="My profile" type="button">
+                                <span class="sr-only">My profile</span>
+                                <span class="nav-user-img">
+                                    <picture>
+                                        <source srcset="./img/avatar/avatar-illustrated-02.webp" type="image/webp"><img
+                                            src="./img/avatar/avatar-illustrated-02.png" alt="User name">
+                                    </picture>
+                                </span>
+                            </button>
+                            <ul class="users-item-dropdown nav-user-dropdown dropdown">
+                                <li><a href="profile.html">
+                                        <i data-feather="user" aria-hidden="true"></i>
+                                        <span>Profile</span>
+                                    </a></li>
+                                <li><a href="##">
+                                        <i data-feather="settings" aria-hidden="true"></i>
+                                        <span>Account settings</span>
+                                    </a></li>
+                                <li><a class="danger" onclick="logout(); return false;" href="#">
+                                        <i data-feather="log-out" aria-hidden="true"></i>
+                                        <span>Log out</span>
+                                    </a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Dashboard -->
+            <main class="main users chart-page" id="skip-target">
+                <div class="container">
+                    <div class="profile-card" id="profile-section">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h3 class="main-title" style="margin: 0;">My Profile</h3>
+                            <button class="btn-delete-avatar" onclick="deleteAvatar()">
+                                <span>🗑️</span>
+                                <span>Delete Avatar</span>
+                            </button>
+                        </div>
+                        <div id="alertBox" class="alert"></div>
+
+                        <div class="profile-header">
+                            <div class="avatar-section">
+                                <div class="avatar-wrapper">
+                                    <img id="profileAvatar" src="./img/avatar/avatar-illustrated-01.png" alt="Avatar" />
+                                    <button class="upload-btn" onclick="triggerFile()">📤</button>
+                                </div>
+                                <input type="file" id="avatarInput" accept="image/*" style="display:none;" />
+                            </div>
+                            <div class="profile-info">
+                                <h3 id="profileName">Loading...</h3>
+                                <p id="profileRole" style="color:#64748b;">Loading...</p>
+                            </div>
+                        </div>
+
+                        <form id="profileForm">
+                            <div class="form-group">
+                                <label for="nameInput">firstName</label>
+                                <input type="text" id="nameInput" placeholder="Enter your firstName" />
+                            <div class="form-group">
+                                <label for="nameInput">Name</label>
+                                <input type="text" id="nameInput" placeholder="Enter your name" />
+                            </div>
+                            <div class="form-group">
+                                <label for="emailInput">Email</label>
+                                <input type="email" id="emailInput" placeholder="Enter your email" />
+                            </div>
+                            
+                        </form>
+
+                        <div class="btn-action">
+                            <button class="btn-update-profile" onclick="updateProfile()">
+                                <span>✏️</span>
+                                <span>Update Profile</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <footer class="footer">
+                <div class="container footer--flex">
+                    <p>2025 © Elegant Dashboard</p>
+                    <ul class="footer-end">
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Support</a></li>
+                        <li><a href="#">Purchase</a></li>
+                    </ul>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Chart library -->
+    <script src="./plugins/chart.min.js"></script>
+    <!-- Icons library -->
+    <script src="plugins/feather.min.js"></script>
+    <!-- Custom scripts -->
+    <script src="js/script.js"></script>
+    <script>
+        const API_URL = "http://blogs.csm.linkpc.net/api/v1";
+        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjY4MCwiaWF0IjoxNzYyOTM3NDEzLCJleHAiOjE3NjM1NDIyMTN9.my4CO3cIpReWwqmmfNVoNzCHldbGlGUwxk3IqL5ZM9A";
+
+        const nameEl = document.getElementById("profileName");
+        const roleEl = document.getElementById("profileRole");
+        const avatarEl = document.getElementById("profileAvatar");
+        const sidebarUser = document.getElementById("sidebarUser");
+        const alertBox = document.getElementById("alertBox");
+        const loadingOverlay = document.getElementById("loadingOverlay");
+        const avatarInput = document.getElementById("avatarInput");
+        const nameInput = document.getElementById("nameInput");
+        const emailInput = document.getElementById("emailInput");
+        const passwordInput = document.getElementById("passwordInput");
+
+        function showLoading(show) {
+            loadingOverlay.classList.toggle("show", show);
+        }
+
+        function showAlert(type, msg) {
+            alertBox.className = "alert show " + (type === "success" ? "alert-success" : "alert-error");
+            alertBox.textContent = msg;
+            setTimeout(() => alertBox.classList.remove("show"), 3000);
+        }
+
+        // ✅ Fetch user profile
+        async function getProfile() {
+            showLoading(true);
+            try {
+                const res = await fetch(`${API_URL}/auth/profile`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                const data = await res.json();
+
+                if (res.ok && data.data) {
+                    const p = data.data;
+                    nameEl.textContent = `${p.firstName || ""} ${p.lastName || ""}`;
+                    roleEl.textContent = p.role || "Member";
+                    avatarEl.src = p.image || "./img/avatar/avatar-illustrated-01.png";
+                    sidebarUser.textContent = p.firstName || "User";
+                    nameInput.value = `${p.firstName || ""} ${p.lastName || ""}`;
+                    emailInput.value = p.email || "";
+                } else {
+                    showAlert("error", data.message || "Failed to load profile");
+                }
+            } catch (err) {
+                console.error(err);
+                showAlert("error", "Error fetching profile data.");
+            }
+            showLoading(false);
+        }
+
+        // ✅ Update profile (PUT /profile)
+        async function updateProfile() {
+            showLoading(true);
+            try {
+                const body = {
+                    name: nameInput.value,
+                    email: emailInput.value,
+                    password: passwordInput.value || undefined
+                };
+
+                const res = await fetch(`${API_URL}/profile`, {
+                    method: "PUT",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(body)
+                });
+
+                const data = await res.json();
+                if (res.ok) {
+                    showAlert("success", "Profile updated successfully!");
+                    getProfile();
+                } else {
+                    showAlert("error", data.message || "Update failed");
+                }
+            } catch (err) {
+                console.error(err);
+                showAlert("error", "Error updating profile");
+            }
+            showLoading(false);
+        }
+
+        // ✅ Upload avatar (POST /profile/avatar)
+        function triggerFile() {
+            avatarInput.click();
+        }
+
+        avatarInput.addEventListener("change", async function () {
+            const file = this.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append("image", file);
+
+            showLoading(true);
+            try {
+                const res = await fetch(`${API_URL}/profile/avatar`, {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: formData
+                });
+
+                const data = await res.json();
+                if (res.ok) {
+                    showAlert("success", "Avatar uploaded successfully!");
+                    avatarEl.src = data.data.image || avatarEl.src;
+                } else {
+                    showAlert("error", data.message || "Failed to upload avatar");
+                }
+            } catch (err) {
+                console.error(err);
+                showAlert("error", "Error uploading avatar");
+            }
+            showLoading(false);
+        });
+
+        // ✅ Delete avatar (DELETE /profile/avatar)
+        async function deleteAvatar() {
+            if (!confirm("Are you sure you want to delete your avatar?")) return;
+            showLoading(true);
+            try {
+                const res = await fetch(`${API_URL}/profile/avatar`, {
+                    method: "DELETE",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    }
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    avatarEl.src = "./img/avatar/avatar-illustrated-01.png";
+                    showAlert("success", "Avatar deleted successfully!");
+                } else {
+                    showAlert("error", data.message || "Failed to delete avatar");
+                }
+            } catch (err) {
+                console.error(err);
+                showAlert("error", "Error deleting avatar");
+            }
+            showLoading(false);
+        }
+
+        // ✅ Auto load when page opens
+        window.onload = getProfile;
+    </script>
+
+
+</body>
+
+</html>
