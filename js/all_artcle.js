@@ -1,5 +1,8 @@
 let tbody = document.getElementById('tbody');
-let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUzNywiaWF0IjoxNzYyODQ2NTMxLCJleHAiOjE3NjM0NTEzMzF9.SuWR96swJdXeIAA1gGJE7owgXSLHgYWSigMW2c8xkpY";
+let token = localStorage.getItem("authToken");
+let categories = document.getElementById('categoriesModal');
+
+console.log(categories);
 
 
 getArticle();
@@ -12,7 +15,7 @@ function getArticle() {
     })
         .then(res => res.json())
         .then(data => {
-            // tbody.innerHTML = "";
+            tbody.innerHTML = "";
             data.data.items.forEach(element => {
                 tbody.innerHTML += `
             <tr>
@@ -29,9 +32,9 @@ function getArticle() {
                 </td>
                 <td>${moment(element.createdAt).format('lll')}</td>
                 <td class="text-end">
-                    <a href="#" class="btn btn-sm btn-outline-danger me-1">
+                    <button onclick="deleteArticle(${element.id})" type="button" href="#" class="btn btn-sm btn-outline-danger me-1">
                         <i class="bi bi-trash"></i>
-                    </a>
+                    </bu>
                     <button onclick="updateArticle(${element.id})"
                         class="btn btn-sm btn-outline-secondary editBtn" 
                         data-bs-toggle="modal" 
@@ -59,42 +62,36 @@ function updateArticle(id) {
         }
     })
         .then(res => res.json())
-        .then(data => {
-            data.data.items.forEach(element => {
+        .then(Info => {
 
+            Info.data.items.forEach(element => {
                 if (element.id == id) {
                     document.getElementById('title').value = element.title;
                     document.getElementById('content').value = element.content;
                     document.getElementById("thumbnail").src = element.thumbnail;
+                    categories.innerHTML += `<option value="${element.category.id}" selected>${element.category.name}</option>`
                 }
             });
-
-            fetch(`http://blogs.csm.linkpc.net/api/v1/categories`)
+            fetch('http://blogs.csm.linkpc.net/api/v1/categories')
                 .then(res => res.json())
                 .then(data => {
-                    data.data.items.forEach(element => {
-                        console.log(id);
-                        document.getElementById('categoriesModal').innerHTML += `<option value="${element.id}">${element.name}</option>`
-                        if (element.id == id) {
-                            document.getElementById('categoriesModal').value = element.id
-                        }
-                    });
-
+                    console.log(data.data.items);
+                    if (Info.data.category == null) {
+                        alert('Please select category');
+                    }
                 })
 
         });
 
 
 
+    // fetch(`http://blogs.csm.linkpc.net/api/v1/articles/${id}`, {
+    //     method: "PUT",
+    //     headers: {
+    //         Authorization: `Bearer ${token}`
+    //     }
 
-
-    fetch(`http://blogs.csm.linkpc.net/api/v1/articles/${id}`, {
-        method: "PUT",
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-
-    })
+    // })
 }
 
 function deleteArticle(id) {
@@ -103,5 +100,9 @@ function deleteArticle(id) {
         headers: {
             Authorization: `Bearer ${token}`
         }
-    })
+    }).then(res => res.json())
+        .then(data => {
+            console.log(data);
+            getArticle();
+        })
 }
