@@ -14,6 +14,12 @@
     <link rel="stylesheet" href="./css/style.min.css">
     <!-- font awesome  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+    <style>
+        .page-item.active .page-link {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+        }
+    </style>
 </head>
 
 <body>
@@ -231,7 +237,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tbl-category p-3 bg-white rounded">
+                    <div class="tbl-category px-3 bg-white rounded">
                         <table class="table table-borderless table-striped ">
                             <thead>
                                 <th>Categories</th>
@@ -240,15 +246,6 @@
                             <tbody class="" id="tbody">
                             </tbody>
                         </table>
-                        <nav aria-label="Page navigation example">
-                            <ul class="pagination justify-content-end">
-                                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                            </ul>
-                        </nav>
                         <!-- Modal edit category -->
                         <div class="modal fade" id="editCate" tabindex="-1" aria-hidden="false"
                             aria-labelledby="updateCate" aria-hidden="true">
@@ -294,6 +291,12 @@
                             </div>
                         </div>
                     </div>
+                    <div class="d-flex justify-content-between px-1">
+                        <p id="sumCategory" class="pt-1"></p>
+                        <ul id="paginationTest" class="pagination pb-4 fs-2">
+                            
+                        </ul>
+                    </div>
                 </div>
             </main>
         </div>
@@ -307,45 +310,50 @@
     <!-- Custom scripts -->
     <script src="js/script.js"></script>
     <script>
-
-
-
+        const perPage = 10;
+        let currentPage = 1;
+        let pagination = document.getElementById('paginationTest');
+        let totalCate=document.getElementById('sumCategory');
         let idCate;
         let body = document.getElementById('tbody');
-        fetch('http://blogs.csm.linkpc.net/api/v1/categories?_page=1&_per_page=10')
-            .then(res => res.json())
-            .then(data => {
-                let sortedDesc = data.data.items.sort((a, b) => b.id - a.id);
-                console.log(sortedDesc);
-                data.data.items.forEach(element => {
-                    body.innerHTML +=
-                        ` <tr>
-           <td class="align-middle">${element.name}</td>
-           <td align="right"><button onclick="editCate(${element.id})" class="btn text-primary fs-5" data-bs-toggle="modal" data-bs-target="#editCate"><i class="fa-regular fa-pen-to-square"></i>
-            </button>
-            <button onclick="openDelete(${element.id})" class="btn text-danger fs-5" data-bs-toggle="modal" data-bs-target="#deleteCate"><i class="fa-regular fa-trash-can"></i></button></td>
-           </tr>`;
-                });
-            })
         //------------------------------------ get all data ---------------------------
-        function getAllCate() {
+        function getAllCate(page) {
             body.innerText = '';
-            fetch('http://blogs.csm.linkpc.net/api/v1/categories?_page=1&_per_page=10')
+            fetch(`http://blogs.csm.linkpc.net/api/v1/categories?_page=${page}&_per_page=${perPage}`)
                 .then(res => res.json())
                 .then(data => {
-                    let sortedDesc = data.data.items.sort((a, b) => b.id - a.id);
-                    console.log(sortedDesc);
-                    data.data.items.forEach(element => {
+                     let sortedDesc = data.data.items.sort((a, b) => b.id - a.id);
+                    sortedDesc.forEach(element => {
                         body.innerHTML +=
                             ` <tr>
-           <td class="align-middle">${element.name}</td>
-           <td align="right"><button onclick="editCate(${element.id})" class="btn text-primary fs-5" data-bs-toggle="modal" data-bs-target="#editCate"><i class="fa-regular fa-pen-to-square"></i>
-            </button>
-            <button onclick="openDelete(${element.id})" class="btn text-danger fs-5" data-bs-toggle="modal" data-bs-target="#deleteCate"><i class="fa-regular fa-trash-can"></i></button></td>
-           </tr>`;
+                            <td class="align-middle">${element.id+"  "+ element.name}</td>
+                            <td align="right"><button onclick="editCate(${element.id})" class="btn text-primary fs-5" data-bs-toggle="modal" data-bs-target="#editCate"><i class="fa-regular fa-pen-to-square"></i>
+                                </button>
+                                <button onclick="openDelete(${element.id})" class="btn text-danger fs-5" data-bs-toggle="modal" data-bs-target="#deleteCate"><i class="fa-regular fa-trash-can"></i></button></td>
+                                </tr>`;
                     });
+                    totalCate.innerText='showing '+ (perPage*page - 9) +' to '+perPage*page+' of '+data.data.meta.totalItems+' items';
+                    const totalPages = data.data.meta.totalPages;
+                    const pagination = Array.from({ length: totalPages }, (_, i) =>
+                        `
+                            <button onclick="getAllCate(${i + 1})" ${i + 1 === page ? 'disabled' : ''}>${i + 1}</button>
+                        `).join(' ');
+                    document.getElementById('paginationTest').innerHTML = ` <li class="page-item ${page === 1 ? 'disabled' : ''}">
+                        <button class="page-link" onclick="getAllCate(${page - 1})">Previous</button>
+                        </li>
+                        ${Array.from({ length: totalPages }, (_, i) => `
+                        <li class="page-item ${page === i + 1 ? 'active' : ''}">
+                            <button class="page-link" onclick="getAllCate(${i + 1})">${i + 1}</button>
+                        </li>
+                        `).join('')}
+                        <li class="page-item ${page === totalPages ? 'disabled' : ''}">
+                        <button class="page-link" onclick="getAllCate(${page + 1})">Next</button>
+                        </li>
+                    `;
+                   
                 })
         }
+        getAllCate(currentPage);
         //---------------------------------- create category -------------------------
         let saveCate = document.getElementById('saveCate');
         saveCate.onclick = () => {
@@ -364,7 +372,7 @@
                 .then(res => res.json())
                 .then(data => {
                     console.log(data)
-                    getAllCate();
+                    getAllCate(currentPage);
                 });
 
         }
@@ -397,7 +405,7 @@
                 .then(res => res.json())
                 .then(data => {
                     console.log(data);
-                    getAllCate();
+                    getAllCate(currentPage);
                 })
         }
         //----------------------------------- open modal delete category ------------
@@ -425,7 +433,7 @@
                 .then(res => res.json())
                 .then(data => {
                     console.log(data);
-                    getAllCate();
+                    getAllCate(currentPage);
                 })
         }
     </script>
