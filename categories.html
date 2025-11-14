@@ -47,7 +47,7 @@
                 <div class="sidebar-body">
                     <ul class="sidebar-body-menu">
                         <li>
-                            <a class="active" href="/"><span class="icon home" aria-hidden="true"></span>Dashboard</a>
+                            <a class="" href="index.html"><span class="icon home" aria-hidden="true"></span>Dashboard</a>
                         </li>
                         <li>
                             <a class="show-cat-btn" href="##">
@@ -67,8 +67,8 @@
                             </ul>
                         </li>
                         <li>
-                            <a class="show-cat-btn" href="##">
-                                <span class="icon folder" aria-hidden="true"></span>Categories
+                            <a class="active show-cat-btn" href="##">
+                                <span class="icon folder " aria-hidden="true"></span>Categories
                                 <span class="category__btn transparent-btn" title="Open list">
                                     <span class="sr-only">Open list</span>
                                     <span class="icon arrow-down" aria-hidden="true"></span>
@@ -329,11 +329,14 @@
                 .then(res => res.json())
                 .then(data => {
                     // let sortedDesc = data.data.items.sort((a, b) => b.id - a.id);
+                    if(data.data.meta.totalItems>5){
+                        alert('not found!');
+                    }
                     data.data.items.forEach(element => {
                         body.innerHTML +=
                             `<tr>
                                 <td class="align-middle">${element.name}</td>
-                                <td align="right"><button onclick="editCate(${element.id})" class="btn text-primary fs-5" data-bs-toggle="modal" data-bs-target="#editCate"><i class="fa-regular fa-pen-to-square"></i>
+                                <td align="right"><button onclick="editCate(${element.id})" class="btn text-primary fs-5" data-bs-toggle="modal" data-bs-target="#editCate"><i classf="fa-regular fa-pen-to-square"></i>
                                     </button>
                                     <button onclick="openDelete(${element.id})" class="btn text-danger fs-5" data-bs-toggle="modal" data-bs-target="#deleteCate"><i class="fa-regular fa-trash-can"></i></button></td>
                             </tr>`;
@@ -345,7 +348,7 @@
                             <button onclick="getAllCate(${i + 1})" ${i + 1 === page ? 'disabled' : ''}>${i + 1}</button>
                         `).join(' ');
                     document.getElementById('paginationTest').innerHTML = ` <li class="page-item ${page === 1 ? 'disabled' : ''}">
-                        <button class="page-link" onclick="getAllCate(${page - 1})">Previous</button>
+                        <button class="page-link" onclick="getAllCate(${page - 1})"><i class="fa-solid fa-angle-left"></i></button>
                         </li>
                         ${Array.from({ length: totalPages }, (_, i) => `
                         <li class="page-item ${page === i + 1 ? 'active' : ''}">
@@ -353,19 +356,17 @@
                         </li>
                         `).join('')}
                         <li class="page-item ${page === totalPages ? 'disabled' : ''}">
-                        <button class="page-link" onclick="getAllCate(${page + 1})">Next</button>
+                        <button class="page-link" onclick="getAllCate(${page + 1})"><i class="fa-solid fa-angle-right"></i></button>
                         </li>
                     `;
-
+                        
                 })
         }
         //------------------------------------ search category ------------------------
         searchKeyWord.onkeyup=()=>{
             console.log(searchKeyWord.value);
             getAllCate(currentPage);
-            if(body.innerText==''){
-                console.log('not found!');
-            }
+            
         }
         getAllCate(currentPage);
         //---------------------------------- create category -------------------------
