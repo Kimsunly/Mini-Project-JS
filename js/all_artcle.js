@@ -1,8 +1,8 @@
 let tbody = document.getElementById('tbody');
 let token = localStorage.getItem("authToken");
 let categories = document.getElementById('categoriesModal');
+let File = document.getElementById('formFile');
 
-console.log(categories);
 
 
 getArticle();
@@ -51,10 +51,14 @@ function getArticle() {
 }
 
 
+
+
 function updateArticle(id) {
-    const myModalEl = document.getElementById('myModal');
-    const myModal = new bootstrap.Modal(myModalEl);
+    var myModalEl = document.getElementById('myModal');
+    var myModal = new bootstrap.Modal(myModalEl);
     myModal.show();
+
+    localStorage.setItem("articleId", id);
 
     fetch(`http://blogs.csm.linkpc.net/api/v1/articles/own?search=&_page=1&_per_page=10&sortBy=createdAt&sortDir=asc`, {
         headers: {
@@ -69,40 +73,84 @@ function updateArticle(id) {
                     document.getElementById('title').value = element.title;
                     document.getElementById('content').value = element.content;
                     document.getElementById("thumbnail").src = element.thumbnail;
-                    categories.innerHTML += `<option value="${element.category.id}" selected>${element.category.name}</option>`
+                    if (element.category != null) {
+                        categories.innerHTML += `<option value="${element.category.id}" selected>${element.category.name}</option>`
+                    } else {
+                        categories.innerHTML += `<option value="0" selected>Please Select</option>`
+                    }
+
                 }
+
             });
             fetch('http://blogs.csm.linkpc.net/api/v1/categories')
                 .then(res => res.json())
                 .then(data => {
-                    console.log(data.data.items);
-                    if (Info.data.category == null) {
-                        alert('Please select category');
-                    }
-                })
 
+                    data.data.items.forEach(element => {
+                        categories.innerHTML += `<option value="${element.id}">${element.name}</option>`
+                    })
+                })
         });
 
-
-
-    // fetch(`http://blogs.csm.linkpc.net/api/v1/articles/${id}`, {
-    //     method: "PUT",
-    //     headers: {
-    //         Authorization: `Bearer ${token}`
-    //     }
-
-    // })
 }
 
-function deleteArticle(id) {
-    fetch(`http://blogs.csm.linkpc.net/api/v1/articles/${id}`, {
-        method: "DELETE",
+
+
+function Update() {
+    event.preventDefault();
+    const catId = localStorage.getItem("articleId");
+    console.log(File.files[0]);
+
+    let formData = new FormData();
+    formData.append('thumbnail', File.files[0]);
+
+
+    data = {
+        "title": document.getElementById('title').value,
+        "content": document.getElementById('content').value,
+        "categoryId": Number(categories.value)
+    }
+
+    console.log(catId);
+
+    fetch(`http://blogs.csm.linkpc.net/api/v1/articles/${catId}`, {
+        method: "PUT",
         headers: {
-            Authorization: `Bearer ${token}`
-        }
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
     }).then(res => res.json())
         .then(data => {
             console.log(data);
             getArticle();
         })
+
+    fetch(`http://blogs.csm.linkpc.net/api/v1/articles/${catId}/thumbnail`, {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${token}`
+        },
+        body: formData
+    }).then(res => res.json())
+        .then(data => {
+            console.log(data);
+        })
+
+}
+
+
+function deleteArticle(id) {
+    if (confirm("Are you sure you want to delete this article?")) {
+        fetch(`http://blogs.csm.linkpc.net/api/v1/articles/${id}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }).then(res => res.json())
+            .then(data => {
+                console.log(data);
+                getArticle();
+            })
+    }
 }
