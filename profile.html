@@ -395,19 +395,18 @@
 
                         <form id="profileForm">
                             <div class="form-group">
-                                <label for="firstInput">firstName</label>
+                                <label for="firstInput">First Name</label>
                                 <input type="text" id="firstInput" name="firstName"
-                                    placeholder="Enter your firstName" />
+                                    placeholder="Enter your first name" />
                             </div>
                             <div class="form-group">
-                                <label for="lastInput">lastName</label>
-                                <input type="text" id="lastInput" name="lastName" placeholder="Enter your lastName" />
+                                <label for="lastInput">Last Name</label>
+                                <input type="text" id="lastInput" name="lastName" placeholder="Enter your last name" />
                             </div>
                             <div class="form-group">
                                 <label for="emailInput">Email</label>
                                 <input type="email" id="emailInput" name="email" placeholder="Enter your email" />
                             </div>
-
                         </form>
 
                         <div class="btn-action">
@@ -444,8 +443,7 @@
     <!-- Custom scripts -->
     <script src="js/script.js"></script>
     <script>
-
-        let token = localStorage.getItem('token');
+        let token = localStorage.getItem('token') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjU1OSwiaWF0IjoxNzYyNzY1MDMxLCJleHAiOjE3NjMzNjk4MzF9.RnSKnO7hSWvNKxHmHaZj420mnoCy6HQ4TnBXOI1SSDk';
         let nameEl = document.getElementById("profileName");
         let createdAt = document.getElementById("createdAt");
         let avatarEl = document.getElementById("profileAvatar");
@@ -457,78 +455,201 @@
         let lastInput = document.getElementById("lastInput");
         let emailInput = document.getElementById("emailInput");
 
+        // Show alert with auto-hide
+        function showAlert(message, type) {
+            alertBox.className = `alert alert-${type} show`;
+            alertBox.innerText = message;
+            setTimeout(() => {
+                alertBox.classList.remove('show');
+            }, 5000);
+        }
 
-        // if (!token) {
-        //     alert('Please log in first.');
-        //     location.href = 'login.html';
-        // }
-
+        // Fetch user data
         const fetchUserData = () => {
             fetch('http://blogs.csm.linkpc.net/api/v1/auth/profile', {
-
                 headers: {
-                    'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjU1OSwiaWF0IjoxNzYyNzY1MDMxLCJleHAiOjE3NjMzNjk4MzF9.RnSKnO7hSWvNKxHmHaZj420mnoCy6HQ4TnBXOI1SSDk`
+                    'Authorization': `Bearer ${token}`
                 }
             })
                 .then(res => res.json())
                 .then(data => {
                     console.log(data.data);
                     if (data.data) {
-                        firstInput.value = data.data.firstName;
-                        lastInput.value = data.data.lastName;
-                        emailInput.value = data.data.email;
-                        nameEl.innerHTML = `${data.data.firstName + " " + data.data.lastName}`
-                        console.log(nameEl.value);
-                        createdAt.innerHTML = (data.data.registeredAt)
+                        firstInput.value = data.data.firstName || '';
+                        lastInput.value = data.data.lastName || '';
+                        emailInput.value = data.data.email || '';
+
+                        const fullName = `${data.data.firstName || ''} ${data.data.lastName || ''}`.trim();
+                        nameEl.textContent = fullName || 'User';
+                        sidebarUser.textContent = fullName || 'User';
+
+                        createdAt.textContent = data.data.registeredAt || 'N/A';
 
                         if (data.data.avatar) {
-                            profileAvatar.src = data.data.avatar;
-                            console.log(profileAvatar);
-
+                            avatarEl.src = data.data.avatar;
                         }
                     } else {
-                        alert('Invalid token or session expired.');
+                        showAlert('Invalid token or session expired.', 'error');
                         localStorage.removeItem('token');
-                        location.href = 'login.html';
+                        setTimeout(() => {
+                            location.href = 'login.html';
+                        }, 2000);
                     }
                 })
-                .catch(err => console.error(err));
+                .catch(err => {
+                    console.error(err);
+                    showAlert('Failed to fetch user data.', 'error');
+                });
+        };
 
+        // Trigger file input
+        function triggerFile() {
+            avatarInput.click();
         }
 
+        // Handle avatar upload
+        avatarInput.addEventListener("change", function () {
+            const file = this.files[0];
+            if (!file) return;
+
+            // Validate file type
+            if (!file.type.startsWith('image/')) {
+                showAlert('Please select a valid image file.', 'error');
+                return;
+            }
+
+            // Validate file size (5MB max)
+            if (file.size > 5 * 1024 * 1024) {
+                showAlert('Image size should be less than 5MB.', 'error');
+                return;
+            }
+
+            // Preview image first
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                avatarEl.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+
+            // Upload to backend
+            const formData = new FormData();
+            formData.append("avatar", file);
+
+            loadingOverlay.classList.add("show");
+
+            fetch("http://blogs.csm.linkpc.net/api/v1/profile/avatar", {
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer " + token
+                },
+                body: formData
+            })
+                .then(res => res.json().then(data => ({ ok: res.ok, data })))
+                .then(result => {
+                    loadingOverlay.classList.remove("show");
+
+                    if (result.ok) {
+                        showAlert("Avatar uploaded successfully!", "success");
+                        fetchUserData();
+                    } else {
+                        showAlert(result.data.message || "Failed to upload avatar!", "error");
+                        // Revert to previous avatar on error
+                        fetchUserData();
+                    }
+                })
+                .catch(() => {
+                    loadingOverlay.classList.remove("show");
+                    showAlert("Error uploading avatar!", "error");
+                    fetchUserData();
+                });
+        });
+
+        // Delete avatar
+        function deleteAvatar() {
+            if (!confirm("Are you sure you want to delete your avatar?")) return;
+
+            loadingOverlay.classList.add("show");
+
+            fetch("http://blogs.csm.linkpc.net/api/v1/profile/avatar", {
+                method: "DELETE",
+                headers: {
+                    "Authorization": "Bearer " + token
+                }
+            })
+                .then(res => res.json().then(data => ({ ok: res.ok, data })))
+                .then(result => {
+                    loadingOverlay.classList.remove("show");
+
+                    if (result.ok) {
+                        avatarEl.src = "./img/avatar/avatar-illustrated-01.png";
+                        showAlert("Avatar deleted successfully!", "success");
+                    } else {
+                        showAlert(result.data.message || "Failed to delete avatar!", "error");
+                    }
+                })
+                .catch(() => {
+                    loadingOverlay.classList.remove("show");
+                    showAlert("Error deleting avatar!", "error");
+                });
+        }
+
+        // Update user data
         const updateUserData = async () => {
+            // Validate inputs
+            if (!firstInput.value.trim() || !lastInput.value.trim() || !emailInput.value.trim()) {
+                showAlert('All fields are required!', 'error');
+                return;
+            }
+
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(emailInput.value)) {
+                showAlert('Please enter a valid email address!', 'error');
+                return;
+            }
+
+            loadingOverlay.classList.add("show");
+
             try {
                 const res = await fetch('http://blogs.csm.linkpc.net/api/v1/profile', {
                     method: "PUT",
                     headers: {
-                        'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjU1OSwiaWF0IjoxNzYyNzY1MDMxLCJleHAiOjE3NjMzNjk4MzF9.RnSKnO7hSWvNKxHmHaZj420mnoCy6HQ4TnBXOI1SSDk`
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/x-www-form-urlencoded'
                     },
-                    body: new URLSearchParams(
-                        {
-                            firstName: firstInput.value,
-                            lastName: lastInput.value,
-                            email: emailInput.value
-                        }
-                    )
-                })
+                    body: new URLSearchParams({
+                        firstName: firstInput.value.trim(),
+                        lastName: lastInput.value.trim(),
+                        email: emailInput.value.trim()
+                    })
+                });
+
+                loadingOverlay.classList.remove("show");
+
                 if (res.ok) {
-                    alert('User data updated successfully')
-                    fetchUserData()
+                    showAlert('Profile updated successfully!', 'success');
+                    fetchUserData();
                 } else {
-                    const errorData = await res.json(); // get JSON response
+                    const errorData = await res.json();
                     const message = errorData.message || 'Unknown error occurred';
-                    alert('Failed to update user data: ' + message);
+                    showAlert('Failed to update profile: ' + message, 'error');
                 }
             } catch (error) {
-                console.log(error);
-
+                loadingOverlay.classList.remove("show");
+                console.error(error);
+                showAlert('Error updating profile!', 'error');
             }
+        };
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('token');
+            location.href = 'login.html';
         }
 
-        fetchUserData()
+        // Initialize
+        fetchUserData();
     </script>
-
-
 </body>
 
 </html>
