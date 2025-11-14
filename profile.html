@@ -210,47 +210,59 @@
                 <div class="sidebar-head">
                     <a href="/" class="logo-wrapper" title="Home">
                         <span class="sr-only">Home</span>
-                        <span class="icon logo"></span>
+                        <span class="icon logo" aria-hidden="true"></span>
                         <div class="logo-text">
                             <span class="logo-title">Admin</span>
                             <span class="logo-subtitle">Dashboard</span>
                         </div>
                     </a>
-                    <button class="sidebar-toggle transparent-btn" type="button">
-                        <span class="icon menu-toggle"></span>
+                    <button class="sidebar-toggle transparent-btn" title="Menu" type="button">
+                        <span class="sr-only">Toggle menu</span>
+                        <span class="icon menu-toggle" aria-hidden="true"></span>
                     </button>
                 </div>
                 <div class="sidebar-body">
                     <ul class="sidebar-body-menu">
-                        <li><a class="active" href="index.html"><span class="icon home"></span>Dashboard</a></li>
                         <li>
-                            <a class="show-cat-btn" href="#"><span class="icon document"></span>My Articles<span
-                                    class="category__btn transparent-btn"><span
-                                        class="icon arrow-down"></span></span></a>
+                            <a class="active" href="/"><span class="icon home" aria-hidden="true"></span>Dashboard</a>
+                        </li>
+                        <li>
+                            <a class="show-cat-btn" href="##">
+                                <span class="icon document" aria-hidden="true"></span>My Articles
+                                <span class="category__btn transparent-btn" title="Open list">
+                                    <span class="sr-only">Open list</span>
+                                    <span class="icon arrow-down" aria-hidden="true"></span>
+                                </span>
+                            </a>
                             <ul class="cat-sub-menu">
-                                <li><a href="posts.html">All Articles</a></li>
-                                <li><a href="new-post.html">Create Article</a></li>
+                                <li>
+                                    <a href="all_articles.html">All Articles</a>
+                                </li>
+                                <li>
+                                    <a href="create_article.html">Create Article</a>
+                                </li>
                             </ul>
                         </li>
                         <li>
-                            <a class="show-cat-btn" href="#"><span class="icon folder"></span>Categories<span
-                                    class="category__btn transparent-btn"><span
-                                        class="icon arrow-down"></span></span></a>
+                            <a class="show-cat-btn" href="##">
+                                <span class="icon folder" aria-hidden="true"></span>Categories
+                                <span class="category__btn transparent-btn" title="Open list">
+                                    <span class="sr-only">Open list</span>
+                                    <span class="icon arrow-down" aria-hidden="true"></span>
+                                </span>
+                            </a>
                             <ul class="cat-sub-menu">
-                                <li><a href="categories.html">All Categories</a></li>
+                                <li>
+                                    <a href="categories.html">All categories</a>
+                                </li>
                             </ul>
                         </li>
-                        <li><a href="#profile-section"><span class="icon user"></span>Profile</a></li>
                     </ul>
                 </div>
             </div>
             <div class="sidebar-footer">
-                <a href="#" class="sidebar-user">
-                    <span class="sidebar-user-img"><img src="./img/avatar/avatar-illustrated-01.png" alt="User"></span>
-                    <div class="sidebar-user-info">
-                        <span class="sidebar-user__title" id="sidebarUser">Loading...</span>
-                        <span class="sidebar-user__subtitle">Admin</span>
-                    </div>
+                <a href="##" class="sidebar-user" id="sidebar-user">
+        
                 </a>
             </div>
         </aside>
@@ -339,11 +351,8 @@
                         <div class="nav-user-wrapper">
                             <button href="##" class="nav-user-btn dropdown-btn" title="My profile" type="button">
                                 <span class="sr-only">My profile</span>
-                                <span class="nav-user-img">
-                                    <picture>
-                                        <source srcset="./img/avatar/avatar-illustrated-02.webp" type="image/webp"><img
-                                            src="./img/avatar/avatar-illustrated-02.png" alt="User name">
-                                    </picture>
+                                <span class="nav-user-img" id="nav-user-img">
+            
                                 </span>
                             </button>
                             <ul class="users-item-dropdown nav-user-dropdown dropdown">
@@ -351,11 +360,7 @@
                                         <i data-feather="user" aria-hidden="true"></i>
                                         <span>Profile</span>
                                     </a></li>
-                                <li><a href="##">
-                                        <i data-feather="settings" aria-hidden="true"></i>
-                                        <span>Account settings</span>
-                                    </a></li>
-                                <li><a class="danger" onclick="logout(); return false;" href="#">
+                                <li><a class="danger" href="login.html">
                                         <i data-feather="log-out" aria-hidden="true"></i>
                                         <span>Log out</span>
                                     </a></li>
@@ -419,13 +424,17 @@
                 </div>
             </main>
 
+            <!-- ! Footer -->
             <footer class="footer">
                 <div class="container footer--flex">
-                    <p>2025 © Elegant Dashboard</p>
+                    <div class="footer-start">
+                        <p>2025 © Admin Dashboard - <a href="#" target="_blank" rel="noopener noreferrer">Admin-dashboard.com</a>
+                        </p>
+                    </div>
                     <ul class="footer-end">
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Support</a></li>
-                        <li><a href="#">Purchase</a></li>
+                        <li><a href="##">About</a></li>
+                        <li><a href="##">Support</a></li>
+                        <li><a href="##">Puchase</a></li>
                     </ul>
                 </div>
             </footer>
@@ -442,12 +451,12 @@
     <script src="plugins/feather.min.js"></script>
     <!-- Custom scripts -->
     <script src="js/script.js"></script>
+    <script src="js/sidebaruser.js"></script>
     <script>
-        let token = localStorage.getItem('Token') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjU1OSwiaWF0IjoxNzYyNzY1MDMxLCJleHAiOjE3NjMzNjk4MzF9.RnSKnO7hSWvNKxHmHaZj420mnoCy6HQ4TnBXOI1SSDk' ;
+        let token = localStorage.getItem('authToken');
         let nameEl = document.getElementById("profileName");
         let createdAt = document.getElementById("createdAt");
         let avatarEl = document.getElementById("profileAvatar");
-        let sidebarUser = document.getElementById("sidebarUser");
         let alertBox = document.getElementById("alertBox");
         let loadingOverlay = document.getElementById("loadingOverlay");
         let avatarInput = document.getElementById("avatarInput");
@@ -481,7 +490,6 @@
 
                         const fullName = `${data.data.firstName || ''} ${data.data.lastName || ''}`.trim();
                         nameEl.textContent = fullName || 'User';
-                        sidebarUser.textContent = fullName || 'User';
 
                         createdAt.textContent = data.data.registeredAt || 'N/A';
 
