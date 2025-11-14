@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="./css/style.min.css">
     <!-- font awesome  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+
     <style>
         .page-item.active .page-link {
             background-color: #0d6efd;
@@ -213,7 +214,7 @@
                         <h3 class=""><b>Categories</b></h3>
                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateCate">Create
                             Categories</button>
-                        <!-- Modal edit category -->
+                        <!-- Modal add category -->
                         <div class="modal fade" id="updateCate" tabindex="-1" aria-hidden="false"
                             aria-labelledby="updateCate" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered ">
@@ -231,7 +232,7 @@
                                     </div>
                                     <div class="modal-footer border-0">
                                         <button type="button" id="saveCate" class="btn btn-primary"
-                                            data-bs-dismiss="modal">Create</button>
+                                            data-bs-dismiss="modal" >Create</button>
                                     </div>
                                 </div>
                             </div>
@@ -294,7 +295,7 @@
                     <div class="d-flex justify-content-between px-1">
                         <p id="sumCategory" class="pt-1"></p>
                         <ul id="paginationTest" class="pagination pb-4 fs-2">
-                            
+
                         </ul>
                     </div>
                 </div>
@@ -309,11 +310,13 @@
     <script src="plugins/feather.min.js"></script>
     <!-- Custom scripts -->
     <script src="js/script.js"></script>
+    <!-- sweetalert js  -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         const perPage = 10;
         let currentPage = 1;
         let pagination = document.getElementById('paginationTest');
-        let totalCate=document.getElementById('sumCategory');
+        let totalCate = document.getElementById('sumCategory');
         let idCate;
         let body = document.getElementById('tbody');
         //------------------------------------ get all data ---------------------------
@@ -322,17 +325,17 @@
             fetch(`http://blogs.csm.linkpc.net/api/v1/categories?_page=${page}&_per_page=${perPage}`)
                 .then(res => res.json())
                 .then(data => {
-                     let sortedDesc = data.data.items.sort((a, b) => b.id - a.id);
+                    let sortedDesc = data.data.items.sort((a, b) => b.id - a.id);
                     sortedDesc.forEach(element => {
                         body.innerHTML +=
                             ` <tr>
-                            <td class="align-middle">${element.id+"  "+ element.name}</td>
+                            <td class="align-middle">${element.id + "  " + element.name}</td>
                             <td align="right"><button onclick="editCate(${element.id})" class="btn text-primary fs-5" data-bs-toggle="modal" data-bs-target="#editCate"><i class="fa-regular fa-pen-to-square"></i>
                                 </button>
                                 <button onclick="openDelete(${element.id})" class="btn text-danger fs-5" data-bs-toggle="modal" data-bs-target="#deleteCate"><i class="fa-regular fa-trash-can"></i></button></td>
                                 </tr>`;
                     });
-                    totalCate.innerText='showing '+ (perPage*page - 9) +' to '+perPage*page+' of '+data.data.meta.totalItems+' items';
+                    totalCate.innerText = 'showing ' + (perPage * page - 9) + ' to ' + perPage * page + ' of ' + data.data.meta.totalItems + ' items';
                     const totalPages = data.data.meta.totalPages;
                     const pagination = Array.from({ length: totalPages }, (_, i) =>
                         `
@@ -350,13 +353,14 @@
                         <button class="page-link" onclick="getAllCate(${page + 1})">Next</button>
                         </li>
                     `;
-                   
+
                 })
         }
         getAllCate(currentPage);
         //---------------------------------- create category -------------------------
         let saveCate = document.getElementById('saveCate');
         saveCate.onclick = () => {
+            showLoading();
             let categoriesName = document.getElementById('categoriesName');
             let data = {
                 name: categoriesName.value
@@ -391,6 +395,7 @@
         //----------------------------------- edit category ---------------------------
         let saveEdit = document.getElementById('saveEditCate');
         saveEdit.onclick = () => {
+            showLoading();
             let data = {
                 name: editCateName.value
             }
@@ -421,6 +426,7 @@
         //-------------------------------------- delete category ---------------------
         let deleteCate = document.getElementById('btnDeleteCate');
         deleteCate.onclick = () => {
+            showLoading();
             fetch(`http://blogs.csm.linkpc.net/api/v1/categories/${idCate}`,
                 {
                     method: 'DELETE',
@@ -435,6 +441,43 @@
                     console.log(data);
                     getAllCate(currentPage);
                 })
+        }
+        //--------------------------------------------------- toast success ----------------
+        function showSucces() {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: 'Product created successfully!',
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true
+            });
+        }
+        //----------------------------------------------- toast loading ------------------------
+        async function showLoading() {
+            let timerInterval;
+            Swal.fire({
+                title: 'Processing...',
+                html: 'Please wait',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            // simulate async process
+            setTimeout(() => {
+                Swal.fire({
+                    toast: true,
+                    position: 'bottom-end',
+                    icon: 'success',
+                    title: 'Done!',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    timerProgressBar: true
+                });
+            }, 1500);
         }
     </script>
 </body>
