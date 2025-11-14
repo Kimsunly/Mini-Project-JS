@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Dashboard</title>
+    <!-- boostrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="./img/svg/logo.svg" type="image/x-icon">
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="./css/style.css">
+    <!-- font awesome  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+
+    <style>
+        .page-item.active .page-link {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layer"></div>
+    <!-- ! Body -->
+    <a class="skip-link sr-only" href="#skip-target">Skip to content</a>
+    <div class="page-flex">
+        <!-- ! Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-start">
+                <div class="sidebar-head">
+                    <a href="/" class="logo-wrapper" title="Home">
+                        <span class="sr-only">Home</span>
+                        <span class="icon logo" aria-hidden="true"></span>
+                        <div class="logo-text">
+                            <span class="logo-title">Admin</span>
+                            <span class="logo-subtitle">Dashboard</span>
+                        </div>
+
+                    </a>
+                    <button class="sidebar-toggle transparent-btn" title="Menu" type="button">
+                        <span class="sr-only">Toggle menu</span>
+                        <span class="icon menu-toggle" aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="sidebar-body">
+                    <ul class="sidebar-body-menu">
+                        <li>
+                            <a href="/"><span class="icon home" aria-hidden="true"></span>Dashboard</a>
+                        </li>
+                        <li>
+                            <a class="show-cat-btn" href="##">
+                                <span class="icon document" aria-hidden="true"></span>My Articles
+                                <span class="category__btn transparent-btn" title="Open list">
+                                    <span class="sr-only">Open list</span>
+                                    <span class="icon arrow-down" aria-hidden="true"></span>
+                                </span>
+                            </a>
+                            <ul class="cat-sub-menu">
+                                <li>
+                                    <a href="posts.html">All Articles</a>
+                                </li>
+                                <li>
+                                    <a href="new-post.html">Create Article</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a class="show-cat-btn active" href="##">
+                                <span class="icon folder" aria-hidden="true"></span>Categories
+                                <span class="category__btn transparent-btn" title="Open list">
+                                    <span class="sr-only">Open list</span>
+                                    <span class="icon arrow-down" aria-hidden="true"></span>
+                                </span>
+                            </a>
+                            <ul class="cat-sub-menu">
+                                <li>
+                                    <a class="active" href="categories.html">All categories</a>
+                                </li>
+                            </ul>
+                    </ul>
+                </div>
+            </div>
+            <div class="sidebar-footer">
+                <a href="##" class="sidebar-user">
+                    <span class="sidebar-user-img">
+                        <picture>
+                            <source srcset="./img/avatar/avatar-illustrated-01.webp" type="image/webp"><img
+                                src="./img/avatar/avatar-illustrated-01.png" alt="User name">
+                        </picture>
+                    </span>
+                    <div class="sidebar-user-info">
+                        <span class="sidebar-user__title">Nafisa Sh.</span>
+                        <span class="sidebar-user__subtitle">Support manager</span>
+                    </div>
+                </a>
+            </div>
+        </aside>
+        <div class="main-wrapper">
+            <!-- ! Main nav -->
+            <nav class="main-nav--bg">
+                <div class="container main-nav">
+                    <div class="main-nav-start">
+                        <div class="search-wrapper">
+                            <i data-feather="search" aria-hidden="true"></i>
+                            <input type="text" placeholder="Enter keywords ..." required>
+                        </div>
+                    </div>
+                    <div class="main-nav-end">
+                        <button class="sidebar-toggle transparent-btn" title="Menu" type="button">
+                            <span class="sr-only">Toggle menu</span>
+                            <span class="icon menu-toggle--gray" aria-hidden="true"></span>
+                        </button>
+                        <div class="lang-switcher-wrapper">
+                            <button class="lang-switcher transparent-btn" type="button">
+                                EN
+                                <i data-feather="chevron-down" aria-hidden="true"></i>
+                            </button>
+                            <ul class="lang-menu dropdown">
+                                <li><a href="##">English</a></li>
+                                <li><a href="##">French</a></li>
+                                <li><a href="##">Uzbek</a></li>
+                            </ul>
+                        </div>
+                        <button class="theme-switcher gray-circle-btn" type="button" title="Switch theme">
+                            <span class="sr-only">Switch theme</span>
+                            <i class="sun-icon" data-feather="sun" aria-hidden="true"></i>
+                            <i class="moon-icon" data-feather="moon" aria-hidden="true"></i>
+                        </button>
+                        <div class="notification-wrapper">
+                            <button class="gray-circle-btn dropdown-btn" title="To messages" type="button">
+                                <span class="sr-only">To messages</span>
+                                <span class="icon notification active" aria-hidden="true"></span>
+                            </button>
+                            <ul class="users-item-dropdown notification-dropdown dropdown">
+                                <li>
+                                    <a href="##">
+                                        <div class="notification-dropdown-icon info">
+                                            <i data-feather="check"></i>
+                                        </div>
+                                        <div class="notification-dropdown-text">
+                                            <span class="notification-dropdown__title">System just updated</span>
+                                            <span class="notification-dropdown__subtitle">The system has been
+                                                successfully upgraded. Read more
+                                                here.</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="##">
+                                        <div class="notification-dropdown-icon danger">
+                                            <i data-feather="info" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="notification-dropdown-text">
+                                            <span class="notification-dropdown__title">The cache is full!</span>
+                                            <span class="notification-dropdown__subtitle">Unnecessary caches take up a
+                                                lot of memory space and
+                                                interfere ...</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="##">
+                                        <div class="notification-dropdown-icon info">
+                                            <i data-feather="check" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="notification-dropdown-text">
+                                            <span class="notification-dropdown__title">New Subscriber here!</span>
+                                            <span class="notification-dropdown__subtitle">A new subscriber has
+                                                subscribed.</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="link-to-page" href="##">Go to Notifications page</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="nav-user-wrapper">
+                            <button href="##" class="nav-user-btn dropdown-btn" title="My profile" type="button">
+                                <span class="sr-only">My profile</span>
+                                <span class="nav-user-img">
+                                    <picture>
+                                        <source srcset="./img/avatar/avatar-illustrated-02.webp" type="image/webp"><img
+                                            src="./img/avatar/avatar-illustrated-02.png" alt="User name">
+                                    </picture>
+                                </span>
+                            </button>
+                            <ul class="users-item-dropdown nav-user-dropdown dropdown">
+                                <li><a href="##">
+                                        <i data-feather="user" aria-hidden="true"></i>
+                                        <span>Profile</span>
+                                    </a></li>
+                                <li><a href="##">
+                                        <i data-feather="settings" aria-hidden="true"></i>
+                                        <span>Account settings</span>
+                                    </a></li>
+                                <li><a class="danger" href="##">
+                                        <i data-feather="log-out" aria-hidden="true"></i>
+                                        <span>Log out</span>
+                                    </a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <!-- Main -->
+            <main>
+                <div class="container">
+                    <div class="d-flex m-3 justify-content-between">
+                        <h3 class=""><b>Categories</b></h3>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateCate">Create
+                            Categories</button>
+                        <!-- Modal add category -->
+                        <div class="modal fade" id="updateCate" tabindex="-1" aria-hidden="false"
+                            aria-labelledby="updateCate" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered ">
+                                <div class="modal-content ">
+                                    <div class="modal-header border-0">
+                                        <h1 class="modal-title fs-4" id="exampleModalLabel"><b>New Category</b></h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body border-0">
+                                        <form action="">
+                                            <input type="text" id="categoriesName" class="form-control border"
+                                                placeholder="Enter Category Name">
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer border-0">
+                                        <button type="button" id="saveCate" class="btn btn-primary"
+                                            data-bs-dismiss="modal">Create</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tbl-category px-3 bg-white rounded">
+                        <table class="table table-borderless table-striped ">
+                            <thead>
+                                <th>Categories</th>
+                                <th class="text-end pe-4">Action</th>
+                            </thead>
+                            <tbody class="" id="tbody">
+                            </tbody>
+                        </table>
+                        <!-- Modal edit category -->
+                        <div class="modal fade" id="editCate" tabindex="-1" aria-hidden="false"
+                            aria-labelledby="updateCate" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered ">
+                                <div class="modal-content ">
+                                    <div class="modal-header border-0">
+                                        <h1 class="modal-title fs-4" id="exampleModalLabel"><b>Edit Category</b></h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body border-0">
+                                        <form action="">
+                                            <input type="text" id="editCateName" class="form-control border"
+                                                placeholder="Enter Category Name">
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer border-0">
+                                        <button type="button" id="saveEditCate" class="btn btn-primary"
+                                            data-bs-dismiss="modal">Save Edit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal delete category -->
+                        <div class="modal fade" id="deleteCate" tabindex="-1" aria-hidden="false"
+                            aria-labelledby="deleteCate" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered ">
+                                <div class="modal-content ">
+                                    <div class="modal-header border-0">
+                                        <h1 class="modal-title fs-4" id="exampleModalLabel"><b id="deleteStatus"></b>
+                                        </h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body border-0">
+                                        <p>Did you sure?</p>
+                                    </div>
+                                    <div class="modal-footer border-0">
+                                        <button type="button" id="btnDeleteCate" class="btn btn-danger"
+                                            data-bs-dismiss="modal">Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between px-1">
+                        <p id="sumCategory" class="pt-1"></p>
+                        <ul id="paginationTest" class="pagination pb-4 fs-2">
+
+                        </ul>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <!-- boostrap js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/js/bootstrap.min.js"></script>
+    <!-- Chart library -->
+    <script src="./plugins/chart.min.js"></script>
+    <!-- Icons library -->
+    <script src="plugins/feather.min.js"></script>
+    <!-- Custom scripts -->
+    <script src="js/script.js"></script>
+    <!-- sweetalert js  -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const perPage = 10;
+        let currentPage = 1;
+        let pagination = document.getElementById('paginationTest');
+        let totalCate = document.getElementById('sumCategory');
+        let idCate;
+        let body = document.getElementById('tbody');
+        //------------------------------------ get all data ---------------------------
+        function getAllCate(page) {
+            body.innerText = '';
+            fetch(`http://blogs.csm.linkpc.net/api/v1/categories?_page=${page}&_per_page=${perPage}`)
+                .then(res => res.json())
+                .then(data => {
+                    let sortedDesc = data.data.items.sort((a, b) => b.id - a.id);
+                    sortedDesc.forEach(element => {
+                        body.innerHTML +=
+                            ` <tr>
+                            <td class="align-middle">${element.id + "  " + element.name}</td>
+                            <td align="right"><button onclick="editCate(${element.id})" class="btn text-primary fs-5" data-bs-toggle="modal" data-bs-target="#editCate"><i class="fa-regular fa-pen-to-square"></i>
+                                </button>
+                                <button onclick="openDelete(${element.id})" class="btn text-danger fs-5" data-bs-toggle="modal" data-bs-target="#deleteCate"><i class="fa-regular fa-trash-can"></i></button></td>
+                                </tr>`;
+                    });
+                    totalCate.innerText = 'showing ' + (perPage * page - 9) + ' to ' + perPage * page + ' of ' + data.data.meta.totalItems + ' items';
+                    const totalPages = data.data.meta.totalPages;
+                    const pagination = Array.from({ length: totalPages }, (_, i) =>
+                        `
+                            <button onclick="getAllCate(${i + 1})" ${i + 1 === page ? 'disabled' : ''}>${i + 1}</button>
+                        `).join(' ');
+                    document.getElementById('paginationTest').innerHTML = ` <li class="page-item ${page === 1 ? 'disabled' : ''}">
+                        <button class="page-link" onclick="getAllCate(${page - 1})">Previous</button>
+                        </li>
+                        ${Array.from({ length: totalPages }, (_, i) => `
+                        <li class="page-item ${page === i + 1 ? 'active' : ''}">
+                            <button class="page-link" onclick="getAllCate(${i + 1})">${i + 1}</button>
+                        </li>
+                        `).join('')}
+                        <li class="page-item ${page === totalPages ? 'disabled' : ''}">
+                        <button class="page-link" onclick="getAllCate(${page + 1})">Next</button>
+                        </li>
+                    `;
+
+                })
+        }
+        getAllCate(currentPage);
+        //---------------------------------- create category -------------------------
+        let saveCate = document.getElementById('saveCate');
+        saveCate.onclick = () => {
+            showLoading();
+            let categoriesName = document.getElementById('categoriesName');
+            let data = {
+                name: categoriesName.value
+            }
+            fetch('http://blogs.csm.linkpc.net/api/v1/categories', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUzOCwiaWF0IjoxNzYyNzg4NzY3LCJleHAiOjE3NjMzOTM1Njd9.gtoMUf3a96u6b-ThPxAKaPlsf3Z23NqeWRwoBHw0HG8`
+                },
+                body: JSON.stringify(data)
+            })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data)
+                    getAllCate(currentPage);
+                });
+
+        }
+        //---------------------------------- open modal edit -------------------------
+        function editCate(id) {
+            idCate = id;
+            fetch(`http://blogs.csm.linkpc.net/api/v1/categories/${id}`)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('editCateName').value = data.data.name;
+                    console.log(data.data.name);
+                })
+
+        }
+
+        //----------------------------------- edit category ---------------------------
+        let saveEdit = document.getElementById('saveEditCate');
+        saveEdit.onclick = () => {
+            showLoading();
+            let data = {
+                name: editCateName.value
+            }
+            fetch(`http://blogs.csm.linkpc.net/api/v1/categories/${idCate}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUzOCwiaWF0IjoxNzYyNzg4NzY3LCJleHAiOjE3NjMzOTM1Njd9.gtoMUf3a96u6b-ThPxAKaPlsf3Z23NqeWRwoBHw0HG8`
+                },
+                body: JSON.stringify(data)
+            })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    getAllCate(currentPage);
+                })
+        }
+        //----------------------------------- open modal delete category ------------
+        function openDelete(id) {
+            idCate = id;
+            fetch(`http://blogs.csm.linkpc.net/api/v1/categories/${id}`)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('deleteStatus').innerText = data.data.name;
+                    console.log(data.data.name);
+                })
+        }
+        //-------------------------------------- delete category ---------------------
+        let deleteCate = document.getElementById('btnDeleteCate');
+        deleteCate.onclick = () => {
+            showLoading();
+            fetch(`http://blogs.csm.linkpc.net/api/v1/categories/${idCate}`,
+                {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUzOCwiaWF0IjoxNzYyNzg4NzY3LCJleHAiOjE3NjMzOTM1Njd9.gtoMUf3a96u6b-ThPxAKaPlsf3Z23NqeWRwoBHw0HG8`
+                    }
+                }
+            )
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    getAllCate(currentPage);
+                })
+        }
+        //--------------------------------------------------- toast success ----------------
+        function showSucces() {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: 'Product created successfully!',
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true
+            });
+        }
+        //----------------------------------------------- toast loading ------------------------
+        async function showLoading() {
+            let timerInterval;
+            Swal.fire({
+                title: 'Processing...',
+                html: 'Please wait',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            // simulate async process
+            setTimeout(() => {
+                Swal.fire({
+                    toast: true,
+                    position: 'bottom-end',
+                    icon: 'success',
+                    title: 'Done!',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    timerProgressBar: true
+                });
+            }, 1500);
+        }
+    </script>
+</body>
+
+</html>
