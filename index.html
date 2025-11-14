@@ -11,7 +11,7 @@
     <!-- Favicon -->
     <link rel="shortcut icon" href="./img/svg/logo.svg" type="image/x-icon">
     <!-- Custom styles -->
-    <link rel="stylesheet" href="./css/style.min.css">
+    <link rel="stylesheet" href="./css/style.css">
     <style>
         .custom-card {
             border-radius: 24px;
@@ -52,7 +52,7 @@
         .card-img-wrapper {
             position: relative;
             overflow: hidden;
-            height: 280px;
+            height: 300px;
         }
 
         .card-overlay {
@@ -245,6 +245,7 @@
                                     <a href="categories.html">All categories</a>
                                 </li>
                             </ul>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -387,23 +388,9 @@
             </footer>
         </div>
     </div>
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script>
         let page = 1;
         let perPage = 10;
-
-        function deltaToHtml(deltaString) {
-            try {
-                const delta = JSON.parse(deltaString);
-                const tempContainer = document.createElement('div');
-                const tempQuill = new Quill(tempContainer);
-                tempQuill.setContents(delta);
-                return tempQuill.root.innerHTML;
-            } catch (err) {
-                console.error("Error converting Quill delta:", err);
-                return "<p>Invalid content format</p>";
-            }
-        }
 
         function getAllArticle() {
             fetch(`http://blogs.csm.linkpc.net/api/v1/articles?_page=${page}&_per_page=${perPage}`)
@@ -411,34 +398,30 @@
                 .then(data => {
                     let item = data.data.items;
                     item.forEach(element => {
-                        // Convert Quill delta JSON to HTML
-                        const htmlContent = deltaToHtml(element.content);
-                        const shortContent = htmlContent.length > 150 ? htmlContent.slice(0, 150) + "..." : htmlContent;
-
                         document.getElementById("card").innerHTML += `
-                            <div class="col-12 col-md-6 col-lg-4">
-                                <div class="card custom-card">
-                                    <div class="card-img-wrapper position-relative">
-                                        <img src="${element.thumbnail}" class="card-img" alt="Photo">
-                                        <span class="category-badge position-absolute top-0 start-0 m-2 px-2 py-1 rounded">
-                                            ${element.category ? element.category.name : "NULL"}
-                                        </span>
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="card custom-card">
+                            <div class="card-img-wrapper position-relative">
+                                <img src="${element.thumbnail}" class="card-img" alt="Photo">
+                                <span class="category-badge position-absolute top-0 start-0 m-2 px-2 py-1 rounded">
+                                    ${element.category ? element.category.name : "NULL"}
+                                </span>
+                            </div>
+                            <div class="card-body">
+                                <h1 class="py-2">${element.title}</h1>
+                                <p>${element.content.substring(0, 100)}...</p>
+                                <div class="d-flex justify-content-between align-items-center mt-4">
+                                    <div class="d-flex align-items-center author-info">
+                                        <img src="${element.creator.avatar}" alt=""
+                                            class="rounded-circle bg-primary" width="40" height="40">
+                                        <small class="ms-2 text-muted">${element.creator.firstName + " " + element.creator.lastName}</small>
                                     </div>
-                                    <div class="card-body">
-                                        <h1 class="py-2">${element.title}</h1>
-                                        <div class="article-preview">${shortContent}</div>
-                                        <div class="d-flex justify-content-between align-items-center mt-4">
-                                            <div class="d-flex align-items-center author-info">
-                                                <img src="${element.creator.avatar}" alt=""
-                                                    class="rounded-circle bg-primary" width="40" height="40">
-                                                <small class="ms-2 text-muted">${element.creator.firstName} ${element.creator.lastName}</small>
-                                            </div>
-                                            <a href="detail_articles.html?id=${element.id}" class="btn btn-primary btn-modern">View Detail</a>
-                                        </div>
-                                    </div>
+                                    <button type="btn"  class="btn btn-primary btn-modern" onclick="toDetail(${element.id})">View Detail</button>
                                 </div>
                             </div>
-                        `;
+                        </div>
+                    </div>
+                `;
                     });
 
                     if (item.length < perPage) {
@@ -451,7 +434,6 @@
         let authToken = localStorage.getItem("authToken");
         let sidebarUser = document.getElementById("sidebar-user");
         let navUserImage = document.getElementById("nav-user-img");
-
         function loadsidebarUser() {
             fetch(`http://blogs.csm.linkpc.net/api/v1/auth/profile`, {
                 method: "GET",
@@ -462,23 +444,23 @@
                 .then(res => res.json())
                 .then(data => {
                     sidebarUser.innerHTML = `
-                        <span class="sidebar-user-img" id="sidebar-user-img">
+                    <span class="sidebar-user-img" id="sidebar-user-img">
+                        <picture>
+                            
+                            <img src="${data.data.avatar}" alt="User name">
+                        </picture>
+                    </span>
+                    <div class="sidebar-user-info" id="sidebar-user-info">
+                        <span class="sidebar-user__title">${data.data.firstName + " " + data.data.lastName}</span>
+                    </div>
+                    `
+                    navUserImage.innerHTML = `
                             <picture>
                                 <img src="${data.data.avatar}" alt="User name">
                             </picture>
-                        </span>
-                        <div class="sidebar-user-info" id="sidebar-user-info">
-                            <span class="sidebar-user__title">${data.data.firstName} ${data.data.lastName}</span>
-                        </div>
-                    `;
-                    navUserImage.innerHTML = `
-                        <picture>
-                            <img src="${data.data.avatar}" alt="User name">
-                        </picture>
-                    `;
-                });
+                        `
+                })
         }
-
         loadsidebarUser();
         getAllArticle(page);
 
@@ -486,9 +468,15 @@
             page++;
             getAllArticle(page);
         }
+
+        function toDetail(id) {
+            sessionStorage.setItem("detail-id", id);
+            location.href = "detail_articles.html";
+        }
+
+
+
     </script>
-
-
     <!-- Chart library -->
     <script src="./plugins/chart.min.js"></script>
     <!-- Icons library -->
