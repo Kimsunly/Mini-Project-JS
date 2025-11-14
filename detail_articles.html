@@ -221,7 +221,6 @@
                             <span class="logo-title">Admin</span>
                             <span class="logo-subtitle">Dashboard</span>
                         </div>
-
                     </a>
                     <button class="sidebar-toggle transparent-btn" title="Menu" type="button">
                         <span class="sr-only">Toggle menu</span>
@@ -243,10 +242,10 @@
                             </a>
                             <ul class="cat-sub-menu">
                                 <li>
-                                    <a href="posts.html">All Articles</a>
+                                    <a href="all_articles.html">All Articles</a>
                                 </li>
                                 <li>
-                                    <a href="new-post.html">Create Article</a>
+                                    <a href="create_article.html">Create Article</a>
                                 </li>
                             </ul>
                         </li>
@@ -268,17 +267,8 @@
                 </div>
             </div>
             <div class="sidebar-footer">
-                <a href="##" class="sidebar-user">
-                    <span class="sidebar-user-img">
-                        <picture>
-                            <source srcset="./img/avatar/avatar-illustrated-01.webp" type="image/webp"><img
-                                src="./img/avatar/avatar-illustrated-01.png" alt="User name">
-                        </picture>
-                    </span>
-                    <div class="sidebar-user-info">
-                        <span class="sidebar-user__title">Nafisa Sh.</span>
-                        <span class="sidebar-user__subtitle">Support manager</span>
-                    </div>
+                <a href="##" class="sidebar-user" id="sidebar-user">
+        
                 </a>
             </div>
         </aside>
@@ -365,23 +355,16 @@
                         <div class="nav-user-wrapper">
                             <button href="##" class="nav-user-btn dropdown-btn" title="My profile" type="button">
                                 <span class="sr-only">My profile</span>
-                                <span class="nav-user-img">
-                                    <picture>
-                                        <source srcset="./img/avatar/avatar-illustrated-02.webp" type="image/webp"><img
-                                            src="./img/avatar/avatar-illustrated-02.png" alt="User name">
-                                    </picture>
+                                <span class="nav-user-img" id="nav-user-img">
+        
                                 </span>
                             </button>
                             <ul class="users-item-dropdown nav-user-dropdown dropdown">
-                                <li><a href="##">
+                                <li><a href="profile.html">
                                         <i data-feather="user" aria-hidden="true"></i>
                                         <span>Profile</span>
                                     </a></li>
-                                <li><a href="##">
-                                        <i data-feather="settings" aria-hidden="true"></i>
-                                        <span>Account settings</span>
-                                    </a></li>
-                                <li><a class="danger" href="##">
+                                <li><a class="danger" href="login.html">
                                         <i data-feather="log-out" aria-hidden="true"></i>
                                         <span>Log out</span>
                                     </a></li>
@@ -432,8 +415,8 @@
             <footer class="footer">
                 <div class="container footer--flex">
                     <div class="footer-start">
-                        <p>2021 © Elegant Dashboard - <a href="elegant-dashboard.com" target="_blank"
-                                rel="noopener noreferrer">elegant-dashboard.com</a></p>
+                        <p>2025 © Admin Dashboard - <a href="#" target="_blank"
+                                rel="noopener noreferrer">Admin-dashboard.com</a></p>
                     </div>
                     <ul class="footer-end">
                         <li><a href="##">About</a></li>
@@ -444,9 +427,10 @@
             </footer>
         </div>
     </div>
+    
     <script>
         let id = sessionStorage.getItem("detail-id");
-        let authToken = localStorage.getItem("token");
+        let authToken = localStorage.getItem("authToken");
         fetch(`http://blogs.csm.linkpc.net/api/v1/articles/${id}`, {
             method: "GET",
             headers: {
@@ -456,14 +440,44 @@
             .then(res => res.json())
             .then(data => {
                 document.getElementById("thumbnail").src = data.data.thumbnail;
-                document.getElementById("categories").innerHTML = data.data.category.name ? data.data.category.name : "NULL";
-                document.getElementById("title").innerHTML = data.data.title;
+                document.getElementById("categories").innerHTML =
+                data.data.category && data.data.category.name ? data.data.category.name : "NULL";                document.getElementById("title").innerHTML = data.data.title;
                 document.getElementById("content").innerHTML = data.data.content;
                 document.getElementById("avatar").src = data.data.creator.avatar;
                 document.getElementById("name").innerHTML = data.data.creator.firstName + " " + data.data.creator.lastName;
             })
-    </script>
 
+        let sidebarUser = document.getElementById("sidebar-user");
+        let navUserImage = document.getElementById("nav-user-img");
+        function loadsidebarUser() {
+            fetch(`http://blogs.csm.linkpc.net/api/v1/auth/profile`, {
+                method: "GET",
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                }
+            })
+                .then(res => res.json())
+                .then(data => {
+                    sidebarUser.innerHTML = `
+                    <span class="sidebar-user-img" id="sidebar-user-img">
+                        <picture>
+                            
+                            <img src="${data.data.avatar}" alt="User name">
+                        </picture>
+                    </span>
+                    <div class="sidebar-user-info" id="sidebar-user-info">
+                        <span class="sidebar-user__title">${data.data.firstName + " " + data.data.lastName}</span>
+                    </div>
+                    `
+                    navUserImage.innerHTML = `
+                            <picture>
+                                <img src="${data.data.avatar}" alt="User name">
+                            </picture>
+                        `
+                })
+        }
+        loadsidebarUser();
+    </script>
     <!-- Chart library -->
     <script src="./plugins/chart.min.js"></script>
     <!-- Icons library -->
