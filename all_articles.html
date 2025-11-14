@@ -3,206 +3,16 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Article Detail</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <title>Admin Dashboard | all articles</title>
     <!-- Favicon -->
     <link rel="shortcut icon" href="./img/svg/logo.svg" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Custom styles -->
+
+    <link rel="stylesheet" href="./css/bootstrap.css">
     <link rel="stylesheet" href="./css/style.css">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary: #667eea;
-            --primary-dark: #5a6fd8;
-            --secondary: #764ba2;
-            --dark: #1a202c;
-            --gray: #718096;
-            --light-gray: #e2e8f0;
-            --light: #f8f9fa;
-        }
-
-        body {
-            background-color: #f5f7fa;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        }
-
-        .article-detail-card {
-            background: white;
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
-            border: none;
-            margin-bottom: 2rem;
-        }
-
-        .article-detail-card:hover {
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
-            transform: translateY(-5px);
-        }
-
-        .article-hero {
-            position: relative;
-            height: 60vh;
-            width: 100%;
-            overflow: hidden;
-        }
-
-        .article-hero img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.8s ease;
-        }
-
-        .article-hero:hover img {
-            transform: scale(1.05);
-        }
-
-        .article-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
-            padding: 2.5rem;
-            color: white;
-        }
-
-        .article-category {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.95);
-            color: var(--primary);
-            padding: 8px 20px;
-            border-radius: 100px;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 1rem;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .article-title {
-            font-size: 2.2rem;
-            font-weight: 800;
-            line-height: 1.3;
-            margin-bottom: 0.5rem;
-            color: white;
-        }
-
-        .article-body {
-            padding: 2.5rem;
-        }
-
-        .article-content {
-            font-size: 1.1rem;
-            line-height: 1.7;
-            color: var(--dark);
-            margin-bottom: 2rem;
-        }
-
-        .article-meta {
-            display: flex;
-            align-items: center;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--light-gray);
-        }
-
-        .author-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            overflow: hidden;
-            margin-right: 1rem;
-            border: 3px solid var(--light-gray);
-            transition: all 0.3s ease;
-        }
-
-        .author-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .article-meta:hover .author-avatar {
-            border-color: var(--primary);
-            transform: scale(1.05);
-        }
-
-        .author-info {
-            flex: 1;
-        }
-
-        .author-name {
-            font-weight: 600;
-            color: var(--dark);
-            margin-bottom: 0.2rem;
-        }
-
-        .article-date {
-            font-size: 0.9rem;
-            color: var(--gray);
-        }
-
-        .article-actions {
-            display: flex;
-            gap: 0.75rem;
-        }
-
-        .btn-action {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--light);
-            color: var(--gray);
-            border: none;
-            transition: all 0.3s ease;
-        }
-
-        .btn-action:hover {
-            background: var(--primary);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .article-hero {
-                height: 300px;
-            }
-
-            .article-title {
-                font-size: 1.8rem;
-            }
-
-            .article-body {
-                padding: 1.5rem;
-            }
-
-            .article-overlay {
-                padding: 1.5rem;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .article-hero {
-                height: 250px;
-            }
-
-            .article-title {
-                font-size: 1.5rem;
-            }
-        }
-    </style>
 </head>
 
 <body>
@@ -231,7 +41,7 @@
                 <div class="sidebar-body">
                     <ul class="sidebar-body-menu">
                         <li>
-                            <a class="active" href="/"><span class="icon home" aria-hidden="true"></span>Dashboard</a>
+                            <a class="" href="/"><span class="icon home" aria-hidden="true"></span>Dashboard</a>
                         </li>
                         <li>
                             <a class="show-cat-btn" href="##">
@@ -258,12 +68,11 @@
                                     <span class="icon arrow-down" aria-hidden="true"></span>
                                 </span>
                             </a>
-                            <ul class="cat-sub-menu">
+                            <ul class="cat-sub-menu active">
                                 <li>
                                     <a href="categories.html">All categories</a>
                                 </li>
                             </ul>
-                        </li>
                     </ul>
                 </div>
             </div>
@@ -283,7 +92,8 @@
             </div>
         </aside>
         <div class="main-wrapper">
-            <!-- ! Main nav -->
+
+
             <nav class="main-nav--bg">
                 <div class="container main-nav">
                     <div class="main-nav-start">
@@ -390,44 +200,107 @@
                     </div>
                 </div>
             </nav>
-            <!-- ! Main -->
-            <main class="main users chart-page">
-                <div class="container my-5">
-                    <div class="row justify-content-center">
-                        <div class="c0l-12">
-                            <div class="article-detail-card">
-                                <div class="article-hero">
-                                    <img id="thumbnail" class="card-img" alt="Article thumbnail">
-                                    <div class="article-overlay">
-                                        <span class="article-category" id="categories"></span>
-                                        <h1 class="article-title" id="title"></h1>
+
+
+
+            <div class="container py-5">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h3 class="fw-bold text-primary mb-1">My Articles</h3>
+                        <p class="text-muted mb-0">Create and manage your articles</p>
+                    </div>
+                    <a href="create_article.html" class="btn btn-primary">
+                        <i class="bi bi-plus-circle me-1"></i> Create Article
+                    </a>
+                </div>
+
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <input type="text" class="form-control input-search" placeholder="🔍 Search article...">
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Category</th>
+                                        <th>Created At</th>
+                                        <th class="text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination -->
+                        <nav class="d-flex justify-content-end mt-3">
+                            <ul class="pagination mb-0">
+                                <li class="page-item disabled"><a class="page-link" href="#"><i
+                                            class="bi bi-chevron-left"></i></a></li>
+                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#"><i
+                                            class="bi bi-chevron-right"></i></a></li>
+                            </ul>
+                        </nav>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel"
+                            aria-hidden="false">
+                            <div class="modal-dialog modal-dialog-centered modal-xl">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-primary ">
+                                        <h1 class="modal-title fs-5 text-white" id="myModalLabel">Edit Article</h1>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                     </div>
-                                </div>
-                                <div class="article-body">
-                                    <div class="article-content" id="content"></div>
-                                    <div class="article-meta">
-                                        <div class="author-avatar">
-                                            <img id="avatar" alt="Author avatar">
-                                        </div>
-                                        <div class="author-info">
-                                            <div class="author-name" id="name"></div>
-                                            <div class="article-date" id="date"></div>
-                                        </div>
-                                        <div class="article-actions">
-                                            <button class="btn-action" title="Share">
-                                                <i class="fas fa-share-alt"></i>
-                                            </button>
-                                            <button class="btn-action" title="Bookmark">
-                                                <i class="far fa-bookmark"></i>
-                                            </button>
-                                        </div>
+                                    <div class="modal-body p-0">
+
+                                        <form class="sign-up-form form w-100 m-auto "
+                                            onsubmit="createArticle(event)">
+                                            <div class="mb-3 input">
+                                                <label for="title" class="form-label">* Title</label>
+                                                <input type="text" class="form-control" id="title"
+                                                    placeholder="Title of articles">
+                                                <p class="ms-3 mt-3 text-danger" id="massages1"></p>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="categories" class="form-label">* Category </label>
+                                                <select class="form-select custom-select" id="categoriesModal">
+                                                    
+                                                </select>
+                                                <p class="ms-3 mt-3 text-danger" id="massages2"></p>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="formFile" class="form-label">* Thumbnail</label>
+                                                <input class="form-control custom-file" type="file" id="formFile">
+                                                <img id="thumbnail" src="" alt="">
+                                                <p class="ms-3 mt-3 text-danger" id="messages3"></p>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="content" class="form-label">* content</label>
+                                                <textarea class="form-control" id="content" rows="5"></textarea>
+                                                <p class="ms-3 mt-3 text-danger" id="messages4"></p>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <button onclick="closeModal()" type="button" class="btn btn-secondary">
+                                                    Cancel
+                                                </button>
+                                                <button type="submit" class="btn btn-primary">Update</button>
+                                            </div>
+                                        </form>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
-            </main>
+            </div>
             <!-- ! Footer -->
             <footer class="footer">
                 <div class="container footer--flex">
@@ -444,32 +317,15 @@
             </footer>
         </div>
     </div>
-    <script>
-        let id = sessionStorage.getItem("detail-id");
-        let authToken = localStorage.getItem("token");
-        fetch(`http://blogs.csm.linkpc.net/api/v1/articles/${id}`, {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${authToken}`,
-            },
-        })
-            .then(res => res.json())
-            .then(data => {
-                document.getElementById("thumbnail").src = data.data.thumbnail;
-                document.getElementById("categories").innerHTML = data.data.category.name ? data.data.category.name : "NULL";
-                document.getElementById("title").innerHTML = data.data.title;
-                document.getElementById("content").innerHTML = data.data.content;
-                document.getElementById("avatar").src = data.data.creator.avatar;
-                document.getElementById("name").innerHTML = data.data.creator.firstName + " " + data.data.creator.lastName;
-            })
-    </script>
-
     <!-- Chart library -->
     <script src="./plugins/chart.min.js"></script>
     <!-- Icons library -->
     <script src="plugins/feather.min.js"></script>
     <!-- Custom scripts -->
     <script src="js/script.js"></script>
+    <script src="js/all_artcle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
 </body>
 
 </html>
