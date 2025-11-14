@@ -139,7 +139,6 @@ function Update() {
 
 }
 
-
 function deleteArticle(id) {
     if (confirm("Are you sure you want to delete this article?")) {
         fetch(`http://blogs.csm.linkpc.net/api/v1/articles/${id}`, {
