@@ -88,13 +88,11 @@
                 <a href="##" class="sidebar-user">
                     <span class="sidebar-user-img">
                         <picture>
-                            <source srcset="./img/avatar/avatar-illustrated-01.webp" type="image/webp"><img
-                                src="./img/avatar/avatar-illustrated-01.png" alt="User name">
+                            <img id="userPic" alt="User name">
                         </picture>
                     </span>
                     <div class="sidebar-user-info">
-                        <span class="sidebar-user__title">Nafisa Sh.</span>
-                        <span class="sidebar-user__subtitle">Support manager</span>
+                        <span class="sidebar-user__title" id="userName">Nafisa Sh.</span>
                     </div>
                 </a>
             </div>
@@ -106,7 +104,7 @@
                     <div class="main-nav-start">
                         <div class="search-wrapper">
                             <i data-feather="search" aria-hidden="true"></i>
-                            <input type="text" placeholder="Enter keywords ..." required>
+                            <input type="text" placeholder="Enter keywords ..." id="searchKeyWord" required>
                         </div>
                     </div>
                     <div class="main-nav-end">
@@ -313,23 +311,38 @@
     <!-- sweetalert js  -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        let token=localStorage.getItem('authToken');
         const perPage = 10;
         let currentPage = 1;
         let pagination = document.getElementById('paginationTest');
         let totalCate = document.getElementById('sumCategory');
         let idCate;
         let body = document.getElementById('tbody');
+        let searchKeyWord=document.getElementById('searchKeyWord');
+      
+        //------------------------------------ get user info --------------------------
+        fetch(`http://blogs.csm.linkpc.net/api/v1/auth/profile`,{
+            headers:{
+                'Authorization':`Bearer ${token}`
+            }
+        })
+        .then(res=>res.json())
+        .then(data=>{
+            document.getElementById('userName').innerText=data.data.firstName+" "+data.data.lastName;
+            document.getElementById('userPic').src=data.data.avatar;
+
+        })
         //------------------------------------ get all data ---------------------------
         function getAllCate(page) {
             body.innerText = '';
-            fetch(`http://blogs.csm.linkpc.net/api/v1/categories?_page=${page}&_per_page=${perPage}`)
+            fetch(`http://blogs.csm.linkpc.net/api/v1/categories?_page=${page}&_per_page=${perPage}&sortDir=desc&sortBy=createdAt&search=${searchKeyWord.value}`)
                 .then(res => res.json())
                 .then(data => {
-                    let sortedDesc = data.data.items.sort((a, b) => b.id - a.id);
-                    sortedDesc.forEach(element => {
+                    // let sortedDesc = data.data.items.sort((a, b) => b.id - a.id);
+                    data.data.items.forEach(element => {
                         body.innerHTML +=
                             `<tr>
-                                <td class="align-middle">${element.id + "  " + element.name}</td>
+                                <td class="align-middle">${element.name}</td>
                                 <td align="right"><button onclick="editCate(${element.id})" class="btn text-primary fs-5" data-bs-toggle="modal" data-bs-target="#editCate"><i class="fa-regular fa-pen-to-square"></i>
                                     </button>
                                     <button onclick="openDelete(${element.id})" class="btn text-danger fs-5" data-bs-toggle="modal" data-bs-target="#deleteCate"><i class="fa-regular fa-trash-can"></i></button></td>
@@ -356,6 +369,14 @@
 
                 })
         }
+        //------------------------------------ search category ------------------------
+        searchKeyWord.onkeyup=()=>{
+            console.log(searchKeyWord.value);
+            getAllCate(currentPage);
+            if(body.innerText==''){
+                console.log('not found!');
+            }
+        }
         getAllCate(currentPage);
         //---------------------------------- create category -------------------------
         let saveCate = document.getElementById('saveCate');
@@ -369,7 +390,7 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUzOCwiaWF0IjoxNzYyNzg4NzY3LCJleHAiOjE3NjMzOTM1Njd9.gtoMUf3a96u6b-ThPxAKaPlsf3Z23NqeWRwoBHw0HG8`
+                    "Authorization": `Bearer ${token}`
                 },
                 body: JSON.stringify(data)
             })
@@ -403,7 +424,7 @@
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUzOCwiaWF0IjoxNzYyNzg4NzY3LCJleHAiOjE3NjMzOTM1Njd9.gtoMUf3a96u6b-ThPxAKaPlsf3Z23NqeWRwoBHw0HG8`
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify(data)
             })
@@ -432,7 +453,7 @@
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUzOCwiaWF0IjoxNzYyNzg4NzY3LCJleHAiOjE3NjMzOTM1Njd9.gtoMUf3a96u6b-ThPxAKaPlsf3Z23NqeWRwoBHw0HG8`
+                        'Authorization': `Bearer ${token}`
                     }
                 }
             )
