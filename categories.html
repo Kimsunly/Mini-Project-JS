@@ -20,6 +20,25 @@
             background-color: #0d6efd;
             border-color: #0d6efd;
         }
+
+        .search-empty {
+            display: flex;
+            height: 300px;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        
+            padding: 12px 15px;
+            border-radius: 10px;
+            
+            color: #757373ff;
+            margin-top: 6px;
+            font-size: 15px;
+        }
+          .search-empty h1{
+            text-align: center;
+            color:#878787;
+          }
     </style>
 </head>
 
@@ -47,7 +66,8 @@
                 <div class="sidebar-body">
                     <ul class="sidebar-body-menu">
                         <li>
-                            <a class="" href="index.html"><span class="icon home" aria-hidden="true"></span>Dashboard</a>
+                            <a class="" href="index.html"><span class="icon home"
+                                    aria-hidden="true"></span>Dashboard</a>
                         </li>
                         <li>
                             <a class="show-cat-btn" href="##">
@@ -180,7 +200,7 @@
                             <button href="##" class="nav-user-btn dropdown-btn" title="My profile" type="button">
                                 <span class="sr-only">My profile</span>
                                 <span class="nav-user-img" id="nav-user-img">
-        
+
                                 </span>
                             </button>
                             <ul class="users-item-dropdown nav-user-dropdown dropdown">
@@ -205,13 +225,14 @@
                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateCate">Create
                             Categories</button>
                         <!-- Modal add category -->
-                        <div class="modal fade" id="updateCate" tabindex="-1" aria-hidden="false" aria-labelledby="updateCate"
-                            aria-hidden="true">
+                        <div class="modal fade" id="updateCate" tabindex="-1" aria-hidden="false"
+                            aria-labelledby="updateCate" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered ">
                                 <div class="modal-content ">
                                     <div class="modal-header border-0">
                                         <h1 class="modal-title fs-4" id="exampleModalLabel"><b>New Category</b></h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body border-0">
                                         <form action="">
@@ -221,7 +242,7 @@
                                     </div>
                                     <div class="modal-footer border-0">
                                         <button type="button" id="saveCate" class="btn btn-primary"
-                                            data-bs-dismiss="modal" >Create</button>
+                                            data-bs-dismiss="modal">Create</button>
                                     </div>
                                 </div>
                             </div>
@@ -237,13 +258,14 @@
                             </tbody>
                         </table>
                         <!-- Modal edit category -->
-                        <div class="modal fade" id="editCate" tabindex="-1" aria-hidden="false" aria-labelledby="updateCate"
-                            aria-hidden="true">
+                        <div class="modal fade" id="editCate" tabindex="-1" aria-hidden="false"
+                            aria-labelledby="updateCate" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered ">
                                 <div class="modal-content ">
                                     <div class="modal-header border-0">
                                         <h1 class="modal-title fs-4" id="exampleModalLabel"><b>Edit Category</b></h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body border-0">
                                         <form action="">
@@ -252,21 +274,23 @@
                                         </form>
                                     </div>
                                     <div class="modal-footer border-0">
-                                        <button type="button" id="saveEditCate" class="btn btn-primary" data-bs-dismiss="modal">Save
+                                        <button type="button" id="saveEditCate" class="btn btn-primary"
+                                            data-bs-dismiss="modal">Save
                                             Edit</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <!-- Modal delete category -->
-                        <div class="modal fade" id="deleteCate" tabindex="-1" aria-hidden="false" aria-labelledby="deleteCate"
-                            aria-hidden="true">
+                        <div class="modal fade" id="deleteCate" tabindex="-1" aria-hidden="false"
+                            aria-labelledby="deleteCate" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered ">
                                 <div class="modal-content ">
                                     <div class="modal-header border-0">
                                         <h1 class="modal-title fs-4" id="exampleModalLabel"><b id="deleteStatus"></b>
                                         </h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body border-0">
                                         <p>Did you sure?</p>
@@ -280,9 +304,11 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-between px-1">
-                        <p id="sumCategory" class="pt-1"></p>
+                        <div>
+                            <p id="sumCategory" class="pt-1"></p>
+                        </div>
                         <ul id="paginationTest" class="pagination pb-4 fs-2">
-            
+
                         </ul>
                     </div>
                 </div>
@@ -301,36 +327,40 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/sidebaruser.js"></script>
     <script>
-        let token=localStorage.getItem('authToken');
+
+        let token = localStorage.getItem('authToken');
         const perPage = 10;
         let currentPage = 1;
         let pagination = document.getElementById('paginationTest');
         let totalCate = document.getElementById('sumCategory');
         let idCate;
         let body = document.getElementById('tbody');
-        let searchKeyWord=document.getElementById('searchKeyWord');
-      
+        let searchKeyWord = document.getElementById('searchKeyWord');
+
         //------------------------------------ get user info --------------------------
-        fetch(`http://blogs.csm.linkpc.net/api/v1/auth/profile`,{
-            headers:{
-                'Authorization':`Bearer ${token}`
+        fetch(`http://blogs.csm.linkpc.net/api/v1/auth/profile`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
             }
         })
-        .then(res=>res.json())
-        .then(data=>{
-            document.getElementById('userName').innerText=data.data.firstName+" "+data.data.lastName;
-            document.getElementById('userPic').src=data.data.avatar;
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('userName').innerText = data.data.firstName + " " + data.data.lastName;
+                document.getElementById('userPic').src = data.data.avatar;
 
-        })
+            })
         //------------------------------------ get all data ---------------------------
         function getAllCate(page) {
             body.innerText = '';
             fetch(`http://blogs.csm.linkpc.net/api/v1/categories?_page=${page}&_per_page=${perPage}&sortDir=desc&sortBy=createdAt&search=${searchKeyWord.value}`)
                 .then(res => res.json())
                 .then(data => {
-                    // let sortedDesc = data.data.items.sort((a, b) => b.id - a.id);
-                    if(data.data.meta.totalItems>5){
-                        alert('not found!');
+                    totalCate.innerText = 'showing ' + (perPage * page - 9) + ' to ' + perPage * page + ' of ' + data.data.meta.totalItems + " items";
+                    if (data.data.meta.totalItems == 0) {
+                        body.innerHTML =`<div class="search-empty">
+                                            <h1>🔍 No matching records ...</h1> 
+                                        </div>`;
+                        return;
                     }
                     data.data.items.forEach(element => {
                         body.innerHTML +=
@@ -341,7 +371,6 @@
                                     <button onclick="openDelete(${element.id})" class="btn text-danger fs-5" data-bs-toggle="modal" data-bs-target="#deleteCate"><i class="fa-regular fa-trash-can"></i></button></td>
                             </tr>`;
                     });
-                    totalCate.innerText = 'showing ' + (perPage * page - 9) + ' to ' + perPage * page + ' of ' + data.data.meta.totalItems + ' items';
                     const totalPages = data.data.meta.totalPages;
                     const pagination = Array.from({ length: totalPages }, (_, i) =>
                         `
@@ -359,20 +388,20 @@
                         <button class="page-link" onclick="getAllCate(${page + 1})"><i class="fa-solid fa-angle-right"></i></button>
                         </li>
                     `;
-                        
+
+
                 })
         }
         //------------------------------------ search category ------------------------
-        searchKeyWord.onkeyup=()=>{
-            console.log(searchKeyWord.value);
+        searchKeyWord.onkeyup = () => {
             getAllCate(currentPage);
-            
         }
+
         getAllCate(currentPage);
         //---------------------------------- create category -------------------------
         let saveCate = document.getElementById('saveCate');
         saveCate.onclick = () => {
-            showLoading();
+            toastLoading();
             let categoriesName = document.getElementById('categoriesName');
             let data = {
                 name: categoriesName.value
@@ -385,8 +414,9 @@
                 },
                 body: JSON.stringify(data)
             })
-                .then(res => res.json())
-                .then(data => {
+            .then(res => res.json())
+            .then(data => {
+                    toastStatus(data.message,data.result);
                     console.log(data)
                     getAllCate(currentPage);
                 });
@@ -407,7 +437,7 @@
         //----------------------------------- edit category ---------------------------
         let saveEdit = document.getElementById('saveEditCate');
         saveEdit.onclick = () => {
-            showLoading();
+            toastLoading();
             let data = {
                 name: editCateName.value
             }
@@ -419,8 +449,9 @@
                 },
                 body: JSON.stringify(data)
             })
-                .then(res => res.json())
-                .then(data => {
+            .then(res => res.json())
+            .then(data => {
+                    toastStatus(data.message,data.result);
                     console.log(data);
                     getAllCate(currentPage);
                 })
@@ -438,18 +469,19 @@
         //-------------------------------------- delete category ---------------------
         let deleteCate = document.getElementById('btnDeleteCate');
         deleteCate.onclick = () => {
-            showLoading();
+            toastLoading();
             fetch(`http://blogs.csm.linkpc.net/api/v1/categories/${idCate}`,
-                {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    }
+            {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 }
-            )
-                .then(res => res.json())
-                .then(data => {
+            }
+        )
+        .then(res => res.json())
+        .then(data => {
+                    toastStatus(data.message,data.result);
                     console.log(data);
                     getAllCate(currentPage);
                 })
@@ -467,26 +499,27 @@
             });
         }
         //----------------------------------------------- toast loading ------------------------
-        async function showLoading() {
-            let timerInterval;
+        function toastLoading(message,result) {
+            // let timerInterval;
             Swal.fire({
                 title: 'Processing...',
                 html: 'Please wait',
                 allowOutsideClick: false,
                 didOpen: () => {
-                    Swal.showLoading();
+                    Swal.toastLoading();
                 }
-            });
-
+            })};
+        //----------------------------------------------- toast status -------------------------
+        async function toastStatus(message,result) {
             // simulate async process
             setTimeout(() => {
                 Swal.fire({
                     toast: true,
                     position: 'bottom-end',
-                    icon: 'success',
-                    title: 'Done!',
+                    icon: result?'success':'error',
+                    title: message,
                     showConfirmButton: false,
-                    timer: 1500,
+                    timer: 2500,
                     timerProgressBar: true
                 });
             }, 1500);
