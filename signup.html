@@ -40,10 +40,11 @@
       animation: slideUp 0.5s ease;
     }
 
-    .signup-gif{
+    .signup-gif {
       border-radius: 10px;
       height: 100%;
     }
+
     @keyframes slideUp {
       from {
         transform: translateY(150px);
@@ -186,87 +187,87 @@
     }
 
     signupForm.onsubmit = (e) => {
-        e.preventDefault();
+      e.preventDefault();
 
-        if (firstName.value.trim() == "") {
-          showToast("✗ Please enter your first name!", "error");
-          return;
-        }
+      if (firstName.value.trim() == "") {
+        showToast("✗ Please enter your first name!", "error");
+        return;
+      }
 
-        if (lastName.value.trim() == "") {
-          showToast("✗ Please enter your last name!", "error");
-          return;
-        }
+      if (lastName.value.trim() == "") {
+        showToast("✗ Please enter your last name!", "error");
+        return;
+      }
 
-        let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!email.value) {
-          showToast("✗ Please enter your email!", "error");
-          return;
-        }
-        if (!emailPattern.test(email.value)) {
-          showToast("✗ Invalid email format!", "error");
-          return;
-        }
+      let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!email.value) {
+        showToast("✗ Please enter your email!", "error");
+        return;
+      }
+      if (!emailPattern.test(email.value)) {
+        showToast("✗ Invalid email format!", "error");
+        return;
+      }
 
-        const pwd = password.value;
-        const pwdPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-        if (!pwd) {
-          showToast("✗ Please enter your password!", "error");
-          return;
-        } else if (!pwdPattern.test(pwd)) {
-          showToast("✗ Password must be 8+ chars with uppercase, lowercase, number & special character!", "error");
-          return;
-        }
+      const pwd = password.value;
+      const pwdPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+      if (!pwd) {
+        showToast("✗ Please enter your password!", "error");
+        return;
+      } else if (!pwdPattern.test(pwd)) {
+        showToast("✗ Password must be 8+ chars with uppercase, lowercase, number & special character!", "error");
+        return;
+      }
 
-        if (!confirmPassword.value) {
-          showToast("✗ Please confirm your password!", "error");
-          return;
-        } else if (pwd && confirmPassword.value !== pwd) {
-          showToast("✗ Passwords do not match!", "error");
-          return;
-        }
+      if (!confirmPassword.value) {
+        showToast("✗ Please confirm your password!", "error");
+        return;
+      } else if (pwd && confirmPassword.value !== pwd) {
+        showToast("✗ Passwords do not match!", "error");
+        return;
+      }
 
-        setLoading(true);
+      setLoading(true);
 
-        let registerData = {
-          firstName: firstName.value,
-          lastName: lastName.value,
-          email: email.value,
-          password: password.value,
-          confirmPassword: confirmPassword.value
-        };
-        fetch(`http://blogs.csm.linkpc.net/api/v1/auth/register`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(registerData)
-        })
-          .then(res => res.json())
-          .then(data => {
-            console.log(data);
-            if (data.success || data.message === "Register successful.") {
-              showToast("✓ Registration Successful! Welcome aboard!", "success");
-              location.href = ""
-            } else if (
-              data.message &&
-              (data.message.toLowerCase().includes("email already exists") ||
-                data.message.toLowerCase().includes("email is already registered") ||
-                data.message.toLowerCase().includes("user already exists"))
-            ) {
-              showToast("✗ Email already exists! Please use a different email.", "error");
-            } else if (data.error || data.message) {
-              showToast("✗ " + (data.error || data.message), "error");
-            } else {
-              showToast("✗ Registration failed. Please try again.", "error");
-            }
-          })
-          .catch(error => {
-            console.error("Error:", error);
-            showToast("✗ Network error. Please try again.", "error");
-          })
-          .finally(() => {
-            setLoading(false);
-          });
+      let registerData = {
+        firstName: firstName.value,
+        lastName: lastName.value,
+        email: email.value,
+        password: password.value,
+        confirmPassword: confirmPassword.value
       };
+      fetch(`http://blogs.csm.linkpc.net/api/v1/auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(registerData)
+      })
+        .then(res => res.json())
+        .then(data => {
+          console.log(data);
+          if (data.success || data.message === "Register successful.") {
+            showToast("✓ Registration Successful! Welcome aboard!", "success");
+            location.href = ""
+          } else if (
+            data.message &&
+            (data.message.toLowerCase().includes("email already exists") ||
+              data.message.toLowerCase().includes("email is already registered") ||
+              data.message.toLowerCase().includes("user already exists"))
+          ) {
+            showToast("✗ Email already exists! Please use a different email.", "error");
+          } else if (data.error || data.message) {
+            showToast("✗ " + (data.error || data.message), "error");
+          } else {
+            showToast("✗ Registration failed. Please try again.", "error");
+          }
+        })
+        .catch(error => {
+          console.error("Error:", error);
+          showToast("✗ Network error. Please try again.", "error");
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    };
 
   </script>
 </body>
