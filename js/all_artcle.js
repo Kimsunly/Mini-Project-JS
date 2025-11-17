@@ -2,25 +2,41 @@ let tbody = document.getElementById('tbody');
 let token = localStorage.getItem("authToken");
 let categories = document.getElementById('categoriesModal');
 let File = document.getElementById('formFile');
+let thumbnailImg = document.getElementById('thumbnailImg');
+let thumbnailModal = document.getElementById('thumbnailModal');
 
+let deleteId = null;
+let updateID = null;
+
+let myModal;  // global
+let currentPage = 1;
+let perPage = 5;
+
+window.onload = () => {
+    const myModalEl = document.getElementById('myModal');
+    myModal = new bootstrap.Modal(myModalEl);
+};
 
 
 getArticle();
+function more() {
+    currentPage++;
+    getArticle();
+}
 function getArticle() {
-
-    fetch(`http://blogs.csm.linkpc.net/api/v1/articles/own?search=&_page=1&_per_page=10&sortBy=createdAt&sortDir=asc`, {
+    fetch(`http://blogs.csm.linkpc.net/api/v1/articles/own?search=&_page=${currentPage}&_per_page=${perPage}&sortBy=createdAt&sortDir=asc`, {
         headers: {
             Authorization: `Bearer ${token}`
         }
     })
         .then(res => res.json())
         .then(data => {
-            tbody.innerHTML = "";
+
             data.data.items.forEach(element => {
                 tbody.innerHTML += `
-            <tr>
+            <tr class="align-middle mt-3">
                 <td>
-                    <div class="d-flex align-items-center">
+                    <div class="d-flex align-items-center justify-content-center gap-5">
                         <img src="${element.thumbnail}" class="article-thumb me-3" alt="">
                         <span>${element.title}</span>
                     </div>
@@ -31,7 +47,7 @@ function getArticle() {
                     </span>
                 </td>
                 <td>${moment(element.createdAt).format('lll')}</td>
-                <td class="text-end">
+                <td class="text-center d-flex gap-2 justify-content-center align-items-center mt-4">
                     <button onclick="deleteArticle(${element.id})" type="button" href="#" class="btn btn-sm btn-outline-danger me-1">
                         <i class="bi bi-trash"></i>
                     </bu>
@@ -54,11 +70,8 @@ function getArticle() {
 
 
 function updateArticle(id) {
-    var myModalEl = document.getElementById('myModal');
-    var myModal = new bootstrap.Modal(myModalEl);
     myModal.show();
-
-    localStorage.setItem("articleId", id);
+    updateID = id;
 
     fetch(`http://blogs.csm.linkpc.net/api/v1/articles/own?search=&_page=1&_per_page=10&sortBy=createdAt&sortDir=asc`, {
         headers: {
@@ -69,7 +82,12 @@ function updateArticle(id) {
         .then(Info => {
 
             Info.data.items.forEach(element => {
+
+
                 if (element.id == id) {
+                    if (element.thumbnail.src != "") {
+                        thumbnailModal.classList.add('d-none');
+                    }
                     document.getElementById('title').value = element.title;
                     document.getElementById('content').value = element.content;
                     document.getElementById("thumbnail").src = element.thumbnail;
@@ -94,12 +112,16 @@ function updateArticle(id) {
 
 }
 
+function removeImage() {
+    thumbnailModal.classList.remove('d-none');
+    thumbnailImg.classList.add('d-none');
+}
 
 
 function Update() {
+    toastLoading()
     event.preventDefault();
-    const catId = localStorage.getItem("articleId");
-    console.log(File.files[0]);
+    const catId = updateID
 
     let formData = new FormData();
     formData.append('thumbnail', File.files[0]);
@@ -111,8 +133,6 @@ function Update() {
         "categoryId": Number(categories.value)
     }
 
-    console.log(catId);
-
     fetch(`http://blogs.csm.linkpc.net/api/v1/articles/${catId}`, {
         method: "PUT",
         headers: {
@@ -122,8 +142,10 @@ function Update() {
         body: JSON.stringify(data)
     }).then(res => res.json())
         .then(data => {
-            console.log(data);
+            tbody.innerHTML = '';
             getArticle();
+            console.log(data);
+            toastStatus(data.message, data.result);
         })
 
     fetch(`http://blogs.csm.linkpc.net/api/v1/articles/${catId}/thumbnail`, {
@@ -134,22 +156,60 @@ function Update() {
         body: formData
     }).then(res => res.json())
         .then(data => {
-            console.log(data);
+            tbody.innerHTML = '';
+            console.log(data.message);
+            myModal.hide();
         })
 
 }
-
 function deleteArticle(id) {
-    if (confirm("Are you sure you want to delete this article?")) {
-        fetch(`http://blogs.csm.linkpc.net/api/v1/articles/${id}`, {
-            method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        }).then(res => res.json())
-            .then(data => {
-                console.log(data);
-                getArticle();
-            })
-    }
+    deleteId = id;
+    var myModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    myModal.show();
+}
+
+function btnComfirm() {
+    toastLoading()
+    const modalEl = document.getElementById('deleteModal');
+    const modal = bootstrap.Modal.getInstance(modalEl);
+    fetch(`http://blogs.csm.linkpc.net/api/v1/articles/${deleteId}`, {
+        method: "DELETE",
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }).then(res => res.json())
+        .then(data => {
+            console.log(data);
+            toastStatus(data.message, data.result);
+            modal.hide();
+            tbody.innerHTML = '';
+            getArticle();
+        })
+}
+
+function toastLoading(message, result) {
+    // let timerInterval;
+    Swal.fire({
+        title: 'Processing...',
+        html: 'Please wait',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.toastLoading();
+        }
+    })
+};
+
+async function toastStatus(message, result) {
+    // simulate async process
+    setTimeout(() => {
+        Swal.fire({
+            toast: true,
+            position: 'bottom-end',
+            icon: result ? 'success' : 'error',
+            title: message,
+            showConfirmButton: false,
+            timer: 2500,
+            timerProgressBar: true
+        });
+    }, 1500);
 }
