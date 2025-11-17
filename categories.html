@@ -342,6 +342,45 @@
                 document.getElementById('userPic').src = data.data.avatar;
 
             })
+        //---------------------------------- pagination with limit page ---------------
+        function renderPagination(totalPages, currentPage) {
+    let pages = [];
+    if (totalPages <= 10) {
+        for (let i = 1; i <= totalPages; i++) pages.push(i);
+    } else {
+        pages.push(1, 2);
+        if (currentPage > 5) pages.push('...');
+        let start = Math.max(3, currentPage - 2);
+        let end = Math.min(totalPages - 2, currentPage + 2);
+        for (let i = start; i <= end; i++) pages.push(i);
+        if (currentPage < totalPages - 4) pages.push('...');
+        pages.push(totalPages - 1, totalPages);
+    }
+
+    const paginationHTML = pages.map(p => {
+        if (p === '...') return `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+        return `<li class="page-item ${p === currentPage ? 'active' : ''}">
+                    <button class="page-link" onclick="getAllCate(${p})">${p}</button>
+                </li>`;
+    }).join('');
+
+    const fullHTML = `
+        <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+            <button class="page-link" onclick="getAllCate(${currentPage - 1})">
+                <i class="fa-solid fa-angle-left"></i>
+            </button>
+        </li>
+        ${paginationHTML}
+        <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+            <button class="page-link" onclick="getAllCate(${currentPage + 1})">
+                <i class="fa-solid fa-angle-right"></i>
+            </button>
+        </li>
+    `;
+
+    document.getElementById('paginationTest').innerHTML = fullHTML;
+}
+
         //------------------------------------ get all data ---------------------------
         function getAllCate(page) {
             body.innerText = '';
@@ -350,11 +389,13 @@
                 .then(data => {
                     totalCate.innerText = 'showing ' + (perPage * page - 9) + ' to ' + perPage * page + ' of ' + data.data.meta.totalItems + " items";
                     if (data.data.meta.totalItems == 0) {
+                        document.getElementById('paginationTest').style.visibility ="hidden";
                         body.innerHTML =`<div class="search-empty">
                                             <h1>🔍 No matching records ...</h1> 
                                         </div>`;
                         return;
                     }
+                     document.getElementById('paginationTest').style.visibility ="visible";
                     data.data.items.forEach(element => {
                         body.innerHTML +=
                             `<tr>
@@ -365,22 +406,7 @@
                             </tr>`;
                     });
                     const totalPages = data.data.meta.totalPages;
-                    const pagination = Array.from({ length: totalPages }, (_, i) =>
-                        `
-                            <button onclick="getAllCate(${i + 1})" ${i + 1 === page ? 'disabled' : ''}>${i + 1}</button>
-                        `).join(' ');
-                    document.getElementById('paginationTest').innerHTML = ` <li class="page-item ${page === 1 ? 'disabled' : ''}">
-                        <button class="page-link" onclick="getAllCate(${page - 1})"><i class="fa-solid fa-angle-left"></i></button>
-                        </li>
-                        ${Array.from({ length: totalPages }, (_, i) => `
-                        <li class="page-item ${page === i + 1 ? 'active' : ''}">
-                            <button class="page-link" onclick="getAllCate(${i + 1})">${i + 1}</button>
-                        </li>
-                        `).join('')}
-                        <li class="page-item ${page === totalPages ? 'disabled' : ''}">
-                        <button class="page-link" onclick="getAllCate(${page + 1})"><i class="fa-solid fa-angle-right"></i></button>
-                        </li>
-                    `;
+                    renderPagination(totalPages,page);
 
 
                 })
