@@ -246,7 +246,7 @@
           console.log(data);
           if (data.success || data.message === "Register successful.") {
             showToast("✓ Registration Successful! Welcome aboard!", "success");
-            location.href = ""
+            location.href = "login.html";
           } else if (
             data.message &&
             (data.message.toLowerCase().includes("email already exists") ||
