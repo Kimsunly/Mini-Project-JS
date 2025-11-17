@@ -2,7 +2,7 @@ let title = document.getElementById('title');
 let categories = document.getElementById('categories');
 let content = document.getElementById('content');
 let file = document.getElementById('formFile');
-let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUzNywiaWF0IjoxNzYyODQ2NTMxLCJleHAiOjE3NjM0NTEzMzF9.SuWR96swJdXeIAA1gGJE7owgXSLHgYWSigMW2c8xkpY"
+let token = localStorage.getItem("authToken");
 
 
 fetch(`http://blogs.csm.linkpc.net/api/v1/categories`)
