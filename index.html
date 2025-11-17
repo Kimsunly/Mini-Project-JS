@@ -383,7 +383,6 @@
                     </ul>
                 </div>
             </footer>
->>>>>>> 3f95dae4663a1d6b5f5f1d988df1dc750bf66e7f
         </div>
     </div>
     <script>
@@ -391,43 +390,48 @@
         let perPage = 10;
 
         function getAllArticle() {
-            fetch(`http://blogs.csm.linkpc.net/api/v1/articles?_page=${page}&_per_page=${perPage}`)
-                .then(res => res.json())
-                .then(data => {
-                    let item = data.data.items;
-                    item.forEach(element => {
-                        document.getElementById("card").innerHTML += `
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="card custom-card">
-                            <div class="card-img-wrapper position-relative">
-                                <img src="${element.thumbnail}" class="card-img" alt="Photo">
-                                <span class="category-badge position-absolute top-0 start-0 m-2 px-2 py-1 rounded">
-                                    ${element.category ? element.category.name : "NULL"}
-                                </span>
-                            </div>
-                            <div class="card-body">
-                                <h1 class="py-2">${element.title}</h1>
-                                <p>${element.content.substring(0, 100)}...</p>
-                                <div class="d-flex justify-content-between align-items-center mt-4">
-                                    <div class="d-flex align-items-center author-info">
-                                        <img src="${element.creator.avatar}" alt=""
-                                            class="rounded-circle bg-primary" width="40" height="40">
-                                        <small class="ms-2 text-muted">${element.creator.firstName + " " + element.creator.lastName}</small>
-                                    </div>
-                                    <button type="btn"  class="btn btn-primary btn-modern" onclick="toDetail(${element.id})">View Detail</button>
+                fetch(`http://blogs.csm.linkpc.net/api/v1/articles?_page=${page}&_per_page=${perPage}&sortBy=createdAt&sortDir=desc`)
+                    .then(res => res.json())
+                    .then(data => {
+                        let items = data.data.items;
+
+                        items.forEach(element => {
+                            document.getElementById("card").innerHTML += `
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card custom-card">
+                        <div class="card-img-wrapper position-relative">
+                            <img src="${element.thumbnail}" class="card-img" alt="Photo">
+                            <span class="category-badge position-absolute top-0 start-0 m-2 px-2 py-1 rounded">
+                                ${element.category ? element.category.name : "NULL"}
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <h1 class="py-2">${element.title}</h1>
+                            <div class="d-flex justify-content-between align-items-center mt-4">
+                                <div class="d-flex align-items-center author-info">
+                                    <img src="${element.creator.avatar}" alt=""
+                                        class="rounded-circle bg-primary" width="40" height="40">
+                                    <small class="ms-2 text-muted">
+                                        ${element.creator.firstName} ${element.creator.lastName}
+                                    </small>
                                 </div>
+                                <button class="btn btn-primary btn-modern" onclick="toDetail(${element.id})">
+                                    View Detail
+                                </button>
                             </div>
                         </div>
                     </div>
+                </div>
                 `;
-                    });
+                        });
 
-                    if (item.length < perPage) {
-                        document.getElementById("loadMoreBtn").style.display = "none";
-                    }
-                })
-                .catch(err => console.error("Error:", err));
-        }
+                        if (items.length < perPage) {
+                            document.getElementById("loadMoreBtn").style.display = "none";
+                        }
+                    })
+                    .catch(err => console.error("Error:", err));
+            }
+
 
         let authToken = localStorage.getItem("authToken");
         let sidebarUser = document.getElementById("sidebar-user");
