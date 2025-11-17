@@ -268,7 +268,7 @@
             </div>
             <div class="sidebar-footer">
                 <a href="##" class="sidebar-user" id="sidebar-user">
-        
+
                 </a>
             </div>
         </aside>
@@ -279,7 +279,7 @@
                     <div class="main-nav-start">
                         <div class="search-wrapper">
                             <i data-feather="search" aria-hidden="true"></i>
-                            <input type="text" placeholder="Enter keywords ..." required>
+                            <input type="text" id="searchInput" placeholder="Enter keywords ..." required>
                         </div>
                     </div>
                     <div class="main-nav-end">
@@ -356,7 +356,6 @@
                             <button href="##" class="nav-user-btn dropdown-btn" title="My profile" type="button">
                                 <span class="sr-only">My profile</span>
                                 <span class="nav-user-img" id="nav-user-img">
-        
                                 </span>
                             </button>
                             <ul class="users-item-dropdown nav-user-dropdown dropdown">
@@ -375,7 +374,13 @@
             </nav>
             <!-- ! Main -->
             <main class="main users chart-page">
-                <div class="container my-5">
+                <div class="container">
+                    <nav aria-label="breadcrumb" class="my-2">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item fs-5 "><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item active text-primary fs-5" aria-current="page">Article Detail</li>
+                        </ol>
+                    </nav>
                     <div class="row justify-content-center">
                         <div class="c0l-12">
                             <div class="article-detail-card">
@@ -427,8 +432,9 @@
             </footer>
         </div>
     </div>
-    
-    <script src="https://cdn.jsdelivr.net/npm/quill-delta-to-html@0.12.0/dist/browser/QuillDeltaToHtmlConverter.bundle.js"></script>
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/quill-delta-to-html@0.12.0/dist/browser/QuillDeltaToHtmlConverter.bundle.js"></script>
     <script>
         let id = sessionStorage.getItem("detail-id");
         let authToken = localStorage.getItem("authToken");
@@ -480,18 +486,18 @@
                 document.getElementById("name").innerHTML = data.data.creator.firstName + " " + data.data.creator.lastName;
                 console.log(data.data.content);
             })
-                let sidebarUser = document.getElementById("sidebar-user");
-                let navUserImage = document.getElementById("nav-user-img");
-                function loadsidebarUser() {
-                    fetch(`http://blogs.csm.linkpc.net/api/v1/auth/profile`, {
-                        method: "GET",
-                        headers: {
-                            'Authorization': `Bearer ${authToken}`
-                        }
-                    })
-                        .then(res => res.json())
-                        .then(data => {
-                            sidebarUser.innerHTML = `
+        let sidebarUser = document.getElementById("sidebar-user");
+        let navUserImage = document.getElementById("nav-user-img");
+        function loadsidebarUser() {
+            fetch(`http://blogs.csm.linkpc.net/api/v1/auth/profile`, {
+                method: "GET",
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                }
+            })
+                .then(res => res.json())
+                .then(data => {
+                    sidebarUser.innerHTML = `
                     <span class="sidebar-user-img" id="sidebar-user-img">
                         <picture>
                             
@@ -502,14 +508,14 @@
                         <span class="sidebar-user__title">${data.data.firstName + " " + data.data.lastName}</span>
                     </div>
                     `
-                            navUserImage.innerHTML = `
+                    navUserImage.innerHTML = `
                             <picture>
                                 <img src="${data.data.avatar}" alt="User name">
                             </picture>
                         `
-                        })
-                }
-                loadsidebarUser();
+                })
+        }
+        loadsidebarUser();
     </script>
     <!-- Chart library -->
     <script src="./plugins/chart.min.js"></script>
