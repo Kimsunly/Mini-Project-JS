@@ -268,7 +268,7 @@
             </div>
             <div class="sidebar-footer">
                 <a href="##" class="sidebar-user" id="sidebar-user">
-        
+
                 </a>
             </div>
         </aside>
@@ -356,7 +356,7 @@
                             <button href="##" class="nav-user-btn dropdown-btn" title="My profile" type="button">
                                 <span class="sr-only">My profile</span>
                                 <span class="nav-user-img" id="nav-user-img">
-        
+
                                 </span>
                             </button>
                             <ul class="users-item-dropdown nav-user-dropdown dropdown">
@@ -427,8 +427,7 @@
             </footer>
         </div>
     </div>
-    
-    <script src="https://cdn.jsdelivr.net/npm/quill-delta-to-html@0.12.0/dist/browser/QuillDeltaToHtmlConverter.bundle.js"></script>
+
     <script>
         let id = sessionStorage.getItem("detail-id");
         let authToken = localStorage.getItem("authToken");
@@ -440,58 +439,29 @@
         })
             .then(res => res.json())
             .then(data => {
-                const contentRaw = data?.data?.content;
-
-                function toPlainText(raw) {
-                    if (raw && typeof raw === "object" && Array.isArray(raw.ops)) {
-                        return raw.ops
-                            .map(op => (typeof op.insert === "string" ? op.insert : ""))
-                            .join("")
-                            .trim();
-                    }
-
-                    if (typeof raw === "string") {
-                        let parsed;
-                        try {
-                            parsed = JSON.parse(raw);
-                        } catch {
-                            return raw.trim();
-                        }
-                        if (parsed && Array.isArray(parsed.ops)) {
-                            return parsed.ops
-                                .map(op => (typeof op.insert === "string" ? op.insert : ""))
-                                .join("")
-                                .trim();
-                        }
-                        return String(raw).trim();
-                    }
-
-                    return "";
-                }
-
-                const plainText = toPlainText(contentRaw);
+                const contentRaw = data.data.content;
 
                 document.getElementById("thumbnail").src = data.data.thumbnail;
                 document.getElementById("categories").innerHTML =
                     data.data.category && data.data.category.name ? data.data.category.name : "NULL";
                 document.getElementById("title").innerHTML = data.data.title;
-                document.getElementById("content").innerText = plainText;
+                document.getElementById("content").innerHTML = contentRaw;
                 document.getElementById("avatar").src = data.data.creator.avatar;
                 document.getElementById("name").innerHTML = data.data.creator.firstName + " " + data.data.creator.lastName;
                 console.log(data.data.content);
             })
-                let sidebarUser = document.getElementById("sidebar-user");
-                let navUserImage = document.getElementById("nav-user-img");
-                function loadsidebarUser() {
-                    fetch(`http://blogs.csm.linkpc.net/api/v1/auth/profile`, {
-                        method: "GET",
-                        headers: {
-                            'Authorization': `Bearer ${authToken}`
-                        }
-                    })
-                        .then(res => res.json())
-                        .then(data => {
-                            sidebarUser.innerHTML = `
+        let sidebarUser = document.getElementById("sidebar-user");
+        let navUserImage = document.getElementById("nav-user-img");
+        function loadsidebarUser() {
+            fetch(`http://blogs.csm.linkpc.net/api/v1/auth/profile`, {
+                method: "GET",
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                }
+            })
+                .then(res => res.json())
+                .then(data => {
+                    sidebarUser.innerHTML = `
                     <span class="sidebar-user-img" id="sidebar-user-img">
                         <picture>
                             
@@ -502,14 +472,14 @@
                         <span class="sidebar-user__title">${data.data.firstName + " " + data.data.lastName}</span>
                     </div>
                     `
-                            navUserImage.innerHTML = `
+                    navUserImage.innerHTML = `
                             <picture>
                                 <img src="${data.data.avatar}" alt="User name">
                             </picture>
                         `
-                        })
-                }
-                loadsidebarUser();
+                })
+        }
+        loadsidebarUser();
     </script>
     <!-- Chart library -->
     <script src="./plugins/chart.min.js"></script>
