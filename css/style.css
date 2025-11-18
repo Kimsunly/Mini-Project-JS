@@ -3116,7 +3116,7 @@ label {
   border-radius: 10px;
   border: 1px solid #e5e7eb;
   padding: 40px 40px 56px;
-  background-color: rgba(229, 231, 235,30%);
+  background-color: rgba(229, 231, 235, 30%);
   text-align: left;
 }
 
@@ -4389,7 +4389,7 @@ select {
   vertical-align: middle;
 }
 
-.input-search{
+.input-search {
   border: 1px solid #C4C4C4 !important;
   border-radius: 5px;
   width: 20%;
@@ -4397,8 +4397,67 @@ select {
   padding: 10px 15px;
 }
 
-.input-search:focus{
+.input-search:focus {
   box-shadow: none;
   height: 46px;
   border-color: 1px solid#5ec0f1;
+}
+
+.btn-readmore {
+  background-color: transparent;
+  border: none;
+  color: #0061f7;
+  margin-bottom: 50px;
+}
+
+.main-wrapper .card {
+  border: none;
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.main-wrapper .card .card-body .input-search {
+  border: none;
+  border-radius: 20px;
+  margin-bottom: 15px !important;
+  padding: 10px 15px;
+}
+
+.main-wrapper .card .card-body table th {
+  border: none;
+  text-align: center;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  padding: 10px 15px;
+  background-color: #f1f7ff;
+}
+
+.main-wrapper .card .card-body table td {
+  border: none;
+  text-align: center;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  padding: 10px 15px;
+}
+
+.main-wrapper .card .card-body table td .article-thumb {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.sign-up-form #thumbnail{
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.btn-cancel{
+  background-color: transparent;
+  border: none;
+  color: #0061f7;
+  margin-bottom: 50px;
+  margin-top: -130px;
 }
