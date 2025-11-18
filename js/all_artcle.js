@@ -36,7 +36,7 @@ function getArticle() {
                 tbody.innerHTML += `
             <tr class="align-middle mt-3">
                 <td>
-                    <div class="d-flex align-items-center justify-content-center gap-5">
+                    <div class="d-flex align-items-center justify-content-start gap-5">
                         <img src="${element.thumbnail}" class="article-thumb me-3" alt="">
                         <span>${element.title}</span>
                     </div>
@@ -47,7 +47,7 @@ function getArticle() {
                     </span>
                 </td>
                 <td>${moment(element.createdAt).format('lll')}</td>
-                <td class="text-center d-flex gap-2 justify-content-center align-items-center mt-4">
+                <td class="text-center d-flex gap-2 justify-content-start align-items-center mt-4">
                     <button onclick="deleteArticle(${element.id})" type="button" href="#" class="btn btn-sm btn-outline-danger me-1">
                         <i class="bi bi-trash"></i>
                     </bu>
