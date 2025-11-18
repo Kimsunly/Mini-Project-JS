@@ -182,7 +182,7 @@
                 </div>
             </nav>
             <!-- ! Main form -->
-            <form class="sign-up-form form w-75 m-auto mt-5" onsubmit="createArticle(event)">
+            <form class="sign-up-form form w-75 m-auto mt-5" onsubmit="createArticle(event)" id="createArticleForm">
                 <div class="mb-3 input">
                     <label for="title" class="form-label">* Title</label>
                     <input type="text" class="form-control" id="title" placeholder="Title of articles">
@@ -235,6 +235,8 @@
     <!-- Custom scripts -->
     <script src="js/script.js"></script>
     <script src="js/create_artcle.js"></script>
+    <!-- sweetalert js  -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>
