@@ -4447,17 +4447,62 @@ select {
   border-radius: 6px;
 }
 
-.sign-up-form #thumbnail{
+.sign-up-form #thumbnail {
   width: 200px;
   height: 200px;
   object-fit: cover;
   border-radius: 6px;
 }
 
-.btn-cancel{
+.btn-cancel {
   background-color: transparent;
   border: none;
   color: #0061f7;
   margin-bottom: 50px;
   margin-top: -130px;
+}
+
+.categories-pagination .pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.categories-pagination .pagination {
+  list-style: none;
+  display: flex;
+  gap: 8px;
+  padding: 0;
+}
+
+.categories-pagination .pagination li {
+  display: inline-block;
+}
+
+.categories-pagination .pagination a {
+  display: block;
+  padding: 8px 14px;
+  background: #f3f3f3;
+  color: #333;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  transition: 0.2s ease;
+}
+
+.categories-pagination .pagination a:hover {
+  background: #007bff;
+  color: white;
+}
+
+.categories-pagination .pagination .active a {
+  background: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.categories-pagination .pagination .disabled a {
+  pointer-events: none;
+  opacity: 0.5;
 }
