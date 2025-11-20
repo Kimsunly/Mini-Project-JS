@@ -4,6 +4,9 @@ let categories = document.getElementById('categoriesModal');
 let File = document.getElementById('formFile');
 let thumbnailImg = document.getElementById('thumbnailImg');
 let thumbnailModal = document.getElementById('thumbnailModal');
+let search = document.getElementById('search');
+let pagination = document.getElementById('paginationTest');
+let totalCate = document.getElementById('sumCategory');
 
 let deleteId = null;
 let updateID = null;
@@ -23,14 +26,15 @@ function more() {
     currentPage++;
     getArticle();
 }
-function getArticle() {
-    fetch(`http://blogs.csm.linkpc.net/api/v1/articles/own?search=&_page=${currentPage}&_per_page=${perPage}&sortBy=createdAt&sortDir=asc`, {
+function getArticle(page) {
+    fetch(`http://blogs.csm.linkpc.net/api/v1/articles/own?search=${search.value}&_page=${currentPage}&_per_page=${perPage}&sortBy=createdAt&sortDir=asc`, {
         headers: {
             Authorization: `Bearer ${token}`
         }
     })
         .then(res => res.json())
         .then(data => {
+
 
             data.data.items.forEach(element => {
                 tbody.innerHTML += `
@@ -61,13 +65,17 @@ function getArticle() {
             </tr>
         `;
 
+
+
             });
 
         });
 }
 
-
-
+search.onkeyup = () => {
+    tbody.innerHTML = '';
+    getArticle(currentPage);
+}
 
 function updateArticle(id) {
     myModal.show();
@@ -83,8 +91,8 @@ function updateArticle(id) {
 
             Info.data.items.forEach(element => {
 
-
                 if (element.id == id) {
+                    thumbnailImg.classList.remove('d-none');
                     if (element.thumbnail.src != "") {
                         thumbnailModal.classList.add('d-none');
                     }
@@ -142,8 +150,7 @@ function Update() {
         body: JSON.stringify(data)
     }).then(res => res.json())
         .then(data => {
-            tbody.innerHTML = '';
-            getArticle();
+
             console.log(data);
             toastStatus(data.message, data.result);
         })
@@ -157,6 +164,7 @@ function Update() {
     }).then(res => res.json())
         .then(data => {
             tbody.innerHTML = '';
+            getArticle();
             console.log(data.message);
             myModal.hide();
         })
@@ -212,4 +220,27 @@ async function toastStatus(message, result) {
             timerProgressBar: true
         });
     }, 1500);
+}
+
+var quill;
+
+document.addEventListener("DOMContentLoaded", function () {
+    quill = new Quill('#quillEditor', {
+        theme: 'snow'
+    });
+});
+
+function Update(event) {
+    event.preventDefault();
+
+    // get HTML from quill editor
+    document.getElementById("content").value = quill.root.innerHTML;
+
+    console.log("Content HTML:", document.getElementById("content").value);
+
+    // continue your update code here...
+}
+
+function openEditModal(htmlContent) {
+    quill.root.innerHTML = htmlContent;
 }
