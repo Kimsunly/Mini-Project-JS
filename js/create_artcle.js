@@ -96,7 +96,7 @@ async function createArticle(event) {
         document.getElementById('createArticleForm').reset();
         quill.setContents([]);
 
-        toastStatus(thumbJson.message, thumbJson.result);
+        toastStatus("Article created successfully", thumbJson.result);
 
     } catch (err) {
         console.log("Error:", err);

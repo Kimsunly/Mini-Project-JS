@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Dropdown</title>
+
+    <style>
+        :root {
+            --white: #fff;
+            --neutral-300: #d4d4d4;
+            --gray-500: #6b7280;
+            --gray-700: #374151;
+            --indigo-50: #eef2ff;
+            --indigo-500: #6366f1;
+            --indigo-700: #4338ca;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            background: #f5f5f5;
+        }
+
+        .dropdown {
+            position: relative;
+            width: 100%;
+            max-width: 280px;
+            font-size: 16px;
+        }
+
+        .dropdown-btn {
+            width: 100%;
+            background: var(--white);
+            border: 1px solid var(--neutral-300);
+            padding: 12px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            color: var(--gray-700);
+            transition: border-color 0.3s ease;
+        }
+
+        .dropdown-btn.open {
+            border-color: var(--indigo-500);
+        }
+
+        .dropdown-list {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            width: 100%;
+            background: var(--white);
+            border: 1px solid var(--neutral-300);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(10px);
+            transition: all 0.25s ease;
+        }
+
+        .dropdown-list.show {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            padding: 12px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            color: var(--gray-500);
+            transition: 0.2s;
+        }
+
+        .dropdown-item:hover {
+            background: var(--indigo-50);
+            color: var(--indigo-700);
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Custom Dropdown</h2>
+
+    <div class="dropdown">
+        <button class="dropdown-btn" id="dropdownBtn">
+            <span id="dropdownSelected">🍔 Hamburger</span>
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
+                <path stroke-width="1.5" stroke="currentColor" stroke-linecap="round"
+                    stroke-linejoin="round" d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+            </svg>
+        </button>
+
+        <div class="dropdown-list" id="dropdownList">
+            <div class="dropdown-item" data-value="hamburger">🍔 Hamburger</div>
+            <div class="dropdown-item" data-value="pizza">🍕 Pizza</div>
+            <div class="dropdown-item" data-value="coffee">☕ Coffee</div>
+        </div>
+    </div>
+
+    <script>
+        const btn = document.getElementById("dropdownBtn");
+        const list = document.getElementById("dropdownList");
+        const selected = document.getElementById("dropdownSelected");
+
+        // Open/close dropdown
+        btn.addEventListener("click", () => {
+            list.classList.toggle("show");
+            btn.classList.toggle("open");
+        });
+
+        // Select item
+        document.querySelectorAll(".dropdown-item").forEach(item => {
+            item.addEventListener("click", () => {
+                selected.textContent = item.textContent;
+                list.classList.remove("show");
+                btn.classList.remove("open");
+            });
+        });
+
+        // Close if clicking outside
+        window.addEventListener("click", (e) => {
+            if (!btn.contains(e.target) && !list.contains(e.target)) {
+                list.classList.remove("show");
+                btn.classList.remove("open");
+            }
+        });
+    </script>
+
+</body>
+
+</html>
