@@ -118,6 +118,8 @@ function updateArticle(id) {
     myModal.show();
     updateID = id;
 
+
+
     fetch(`http://blogs.csm.linkpc.net/api/v1/articles/own?search=&_page=1&_per_page=10&sortBy=createdAt&sortDir=asc`, {
         headers: {
             Authorization: `Bearer ${token}`
@@ -126,23 +128,26 @@ function updateArticle(id) {
         .then(res => res.json())
         .then(Info => {
 
-
             Info.data.items.forEach(element => {
+
                 if (element.id == id) {
                     thumbnailImg.classList.remove('d-none');
+
                     if (element.thumbnail.src != "") {
                         thumbnailModal.classList.add('d-none');
                     }
-                    document.getElementById('title').value = element.title;
-                    document.getElementById('content').value = element.content;
-                    document.getElementById("thumbnail").src = element.thumbnail;
-                    if (element.category != null) {
-                        categories.innerHTML += `<option value="${element.category.id}" selected>${element.category.name}</option>`
-                    } else {
-                        categories.innerHTML += `<option value="0" selected>Please Select</option>`
-                    }
 
+                    document.getElementById('title').value = element.title;
+                    quill.root.innerHTML = element.content;
+                    document.getElementById("thumbnail").src = element.thumbnail;
+
+                    if (element.category != null) {
+                        categories.innerHTML += `<option value="${element.category.id}" selected>${element.category.name}</option>`;
+                    } else {
+                        categories.innerHTML += `<option value="0" selected>Please Select</option>`;
+                    }
                 }
+
 
 
             });
@@ -171,6 +176,8 @@ function Update() {
 
     let formData = new FormData();
     formData.append('thumbnail', File.files[0]);
+
+    document.getElementById('content').value = quill.root.innerHTML;
 
 
     data = {
@@ -206,9 +213,9 @@ function Update() {
                         toastStatus(data.message, data.result);
                     }
                     myModal.hide();
+                    File.value = "";
                 })
         })
-
 
 
 }
