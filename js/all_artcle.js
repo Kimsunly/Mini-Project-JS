@@ -118,8 +118,6 @@ function updateArticle(id) {
     myModal.show();
     updateID = id;
 
-
-
     fetch(`http://blogs.csm.linkpc.net/api/v1/articles/own?search=&_page=1&_per_page=10&sortBy=createdAt&sortDir=asc`, {
         headers: {
             Authorization: `Bearer ${token}`

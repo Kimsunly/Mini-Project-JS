@@ -387,22 +387,7 @@
     </div>
     <script>
         let page = 1;
-        let perPage = 10;
-        let authToken = localStorage.getItem("authToken");
-        function logout(){
-            fetch(`http://blogs.csm.linkpc.net/api/v1/articles/auth/logout`,{
-                method: "DELETE",
-                headers: {
-                    'Authorization': `Bearer ${authToken}`
-                }
-            }).then(res => res.json)
-            .then(data => {
-                localStorage.removeItem("authToken"),
-                location.href = "login.html"
-
-
-            })
-        }
+        let perPage = 9;
 
         function getAllArticle() {
                 fetch(`http://blogs.csm.linkpc.net/api/v1/articles?_page=${page}&_per_page=${perPage}&sortBy=createdAt&sortDir=desc`,{
