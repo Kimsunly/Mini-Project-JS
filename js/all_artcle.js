@@ -244,32 +244,30 @@ function btnComfirm() {
         })
 }
 
-function toastLoading(message, result) {
-    // let timerInterval;
+// ================= TOASTS =================
+function toastLoading() {
     Swal.fire({
         title: 'Processing...',
         html: 'Please wait',
         allowOutsideClick: false,
         didOpen: () => {
-            Swal.toastLoading();
+            Swal.showLoading();
         }
-    })
-};
-
-async function toastStatus(message, result) {
-    // simulate async process
-    setTimeout(() => {
-        Swal.fire({
-            toast: true,
-            position: 'bottom-end',
-            icon: result ? 'success' : 'error',
-            title: message,
-            showConfirmButton: false,
-            timer: 2500,
-            timerProgressBar: true
-        });
-    }, 1500);
+    });
 }
+
+function toastStatus(message, result) {
+    Swal.fire({
+        toast: true,
+        position: 'bottom-end',
+        icon: result ? 'success' : 'error',
+        title: message,
+        showConfirmButton: false,
+        timer: 2500,
+        timerProgressBar: true
+    });
+}
+
 
 var quill;
 

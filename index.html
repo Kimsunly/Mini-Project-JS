@@ -348,7 +348,7 @@
                                         <i data-feather="user" aria-hidden="true"></i>
                                         <span>Profile</span>
                                     </a></li>
-                                <li><a class="danger" href="login.html">
+                                <li><a class="danger" onclick="logout()">
                                         <i data-feather="log-out" aria-hidden="true"></i>
                                         <span>Log out</span>
                                     </a></li>
@@ -388,9 +388,29 @@
     <script>
         let page = 1;
         let perPage = 10;
+        let authToken = localStorage.getItem("authToken");
+        function logout(){
+            fetch(`http://blogs.csm.linkpc.net/api/v1/articles/auth/logout`,{
+                method: "DELETE",
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                }
+            }).then(res => res.json)
+            .then(data => {
+                localStorage.removeItem("authToken"),
+                location.href = "login.html"
+
+
+            })
+        }
 
         function getAllArticle() {
-                fetch(`http://blogs.csm.linkpc.net/api/v1/articles?_page=${page}&_per_page=${perPage}&sortBy=createdAt&sortDir=desc`)
+                fetch(`http://blogs.csm.linkpc.net/api/v1/articles?_page=${page}&_per_page=${perPage}&sortBy=createdAt&sortDir=desc`,{
+                    method: "GET",
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                })
                     .then(res => res.json())
                     .then(data => {
                         let items = data.data.items;
@@ -450,7 +470,7 @@
                 });
             });
 
-        let authToken = localStorage.getItem("authToken");
+        
         let sidebarUser = document.getElementById("sidebar-user");
         let navUserImage = document.getElementById("nav-user-img");
         function loadsidebarUser() {
