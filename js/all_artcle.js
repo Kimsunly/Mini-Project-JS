@@ -14,7 +14,10 @@ let updateID = null;
 let myModal;  // global
 let currentPage = 1;
 let perPage = 5;
-
+if (!token) {
+    window.location.href = "login.html";
+    throw new Error("No auth token, redirecting to login");
+}
 window.onload = () => {
     const myModalEl = document.getElementById('myModal');
     myModal = new bootstrap.Modal(myModalEl);
